@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sundew.TextView.ApplicationFramework", "Sources\Sundew.TextView.ApplicationFramework\Sundew.TextView.ApplicationFramework.csproj", "{CBA69EFA-B22B-4423-AF70-F0FC9B8AF653}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sundew.TextView.ApplicationFramework.SampleApplication", "Sources\Sundew.TextView.ApplicationFramework.SampleApplication\Sundew.TextView.ApplicationFramework.SampleApplication.csproj", "{A9ACA932-B029-4AB6-9259-A118504A8FA5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sundew.TextView.ApplicationFramework.Tests", "Sources\Sundew.TextView.ApplicationFramework.Tests\Sundew.TextView.ApplicationFramework.Tests.csproj", "{804A009E-E69F-4937-8F35-FD12D5F35DC3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sundew.TextView.Pi.Drivers", "Sources\Sundew.TextView.Pi.Drivers\Sundew.TextView.Pi.Drivers.csproj", "{46A8EB5E-18B1-4E6C-A668-8AF39EC91126}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBA69EFA-B22B-4423-AF70-F0FC9B8AF653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBA69EFA-B22B-4423-AF70-F0FC9B8AF653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBA69EFA-B22B-4423-AF70-F0FC9B8AF653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBA69EFA-B22B-4423-AF70-F0FC9B8AF653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9ACA932-B029-4AB6-9259-A118504A8FA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9ACA932-B029-4AB6-9259-A118504A8FA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9ACA932-B029-4AB6-9259-A118504A8FA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9ACA932-B029-4AB6-9259-A118504A8FA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{804A009E-E69F-4937-8F35-FD12D5F35DC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{804A009E-E69F-4937-8F35-FD12D5F35DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{804A009E-E69F-4937-8F35-FD12D5F35DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{804A009E-E69F-4937-8F35-FD12D5F35DC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46A8EB5E-18B1-4E6C-A668-8AF39EC91126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46A8EB5E-18B1-4E6C-A668-8AF39EC91126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46A8EB5E-18B1-4E6C-A668-8AF39EC91126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46A8EB5E-18B1-4E6C-A668-8AF39EC91126}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27E7B88D-E9AE-47B0-8FD0-793712963D42}
+	EndGlobalSection
+EndGlobal
