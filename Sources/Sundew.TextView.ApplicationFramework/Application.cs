@@ -10,6 +10,7 @@ namespace Sundew.TextView.ApplicationFramework
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using Sundew.Base.Disposal;
     using Sundew.Base.Threading;
     using Sundew.TextView.ApplicationFramework.DeviceInterface;
     using Sundew.TextView.ApplicationFramework.Input;
@@ -22,9 +23,9 @@ namespace Sundew.TextView.ApplicationFramework
     public class Application : IApplication
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private readonly DisposingList<IDisposable> disposer = new DisposingList<IDisposable>();
         private ITextViewRendererFactory textViewRendererFactory;
         private ITextViewRenderer textViewRenderer;
-        private bool canDisposeTextViewRendererFactory;
         private InputManager inputManager;
         private IdleMonitor idleMonitor;
 
@@ -93,8 +94,10 @@ namespace Sundew.TextView.ApplicationFramework
         /// <returns>A <see cref="TextViewNavigator" />.</returns>
         public ITextViewNavigator StartRendering(ITextDisplayDevice textDisplayDevice)
         {
-            this.canDisposeTextViewRendererFactory = true;
-            return this.StartRendering(new TextViewRendererFactory(textDisplayDevice, new TimerFactory(), this.TextViewRendererReporter));
+            var timerFactory = this.disposer.Add(new TimerFactory());
+            var textViewRendererFactory = this.disposer.Add(
+                new TextViewRendererFactory(textDisplayDevice, timerFactory, this.TextViewRendererReporter));
+            return this.StartRendering(textViewRendererFactory);
         }
 
         /// <summary>
@@ -160,10 +163,7 @@ namespace Sundew.TextView.ApplicationFramework
             {
                 Console.CancelKeyPress -= this.OnConsoleCancelKeyPress;
                 this.idleMonitor?.Dispose();
-                if (this.canDisposeTextViewRendererFactory)
-                {
-                    this.textViewRendererFactory?.Dispose();
-                }
+                this.disposer.Dispose();
             }
         }
 

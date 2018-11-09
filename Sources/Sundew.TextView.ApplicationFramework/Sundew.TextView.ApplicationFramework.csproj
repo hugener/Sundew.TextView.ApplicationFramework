@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<LangVersion>latest</LangVersion>
-	<Version>0.0.0-pre001</Version>
+	<Version>0.0.0-pre002</Version>
 	<Company>Hukano</Company>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<Authors>Kim Hugener-Ohlsen</Authors>
-	<Description>Application framework for implementing text display based applications .</Description>
+	<Description>Application framework for implementing text display based applications.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -35,7 +35,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Sundew.Base" Version="3.2.0-pre039" />
+    <PackageReference Include="Sundew.Base" Version="3.2.0-pre040" />
   </ItemGroup>
 
 </Project>
