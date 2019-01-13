@@ -12,7 +12,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     using System.Threading;
     using Sundew.Base.Threading;
 
-    internal class ViewTimer : IViewTimer, IDisposable
+    internal class ViewTimer : IViewTimer
     {
         private readonly ITimer timer;
         private readonly LinkedList<EventHandler> tick = new LinkedList<EventHandler>();
@@ -59,12 +59,6 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         {
             this.Stop();
             this.tick.Clear();
-        }
-
-        public void Dispose()
-        {
-            this.Reset();
-            this.timer.Dispose();
         }
 
         private void OnTimerTick(ITimer timer)

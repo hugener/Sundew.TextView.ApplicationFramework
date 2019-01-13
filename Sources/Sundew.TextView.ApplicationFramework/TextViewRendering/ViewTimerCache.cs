@@ -40,7 +40,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
 
         public void Dispose()
         {
-            this.timers.ForEach(x => x.Dispose());
+            this.timers.ForEach(x => x.Reset());
             this.usedTimers = 0;
             this.timers.Clear();
         }

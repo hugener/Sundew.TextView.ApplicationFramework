@@ -94,9 +94,10 @@ namespace Sundew.TextView.ApplicationFramework
         /// <returns>A <see cref="TextViewNavigator" />.</returns>
         public ITextViewNavigator StartRendering(ITextDisplayDevice textDisplayDevice)
         {
-            var timerFactory = this.disposer.Add(new TimerFactory());
+            var timerFactory = new TimerFactory();
             var textViewRendererFactory = this.disposer.Add(
                 new TextViewRendererFactory(textDisplayDevice, timerFactory, this.TextViewRendererReporter));
+            this.disposer.Add(timerFactory);
             return this.StartRendering(textViewRendererFactory);
         }
 

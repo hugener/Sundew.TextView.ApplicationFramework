@@ -1,7 +1,7 @@
 ﻿namespace Sundew.TextView.ApplicationFramework.SampleApplication
 {
     using System.Threading.Tasks;
-    using DeviceInterface;
+    using Sundew.TextView.ApplicationFramework.DeviceInterface;
 
     class Program
     {
