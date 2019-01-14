@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<LangVersion>latest</LangVersion>
-	<Version>0.0.0-pre006</Version>
+	<Version>0.0.0-pre007</Version>
 	<Company>Hukano</Company>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<Authors>Kim Hugener-Ohlsen</Authors>
@@ -35,7 +35,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Sundew.Base" Version="3.2.4" />
+    <PackageReference Include="Sundew.Base" Version="3.2.5" />
   </ItemGroup>
 
 </Project>

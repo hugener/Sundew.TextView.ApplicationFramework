@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.0-pre005</Version>
+    <Version>0.0.0-pre006</Version>
     <Company>Hukano</Company>
     <Authors>Kim Hugener-Ohlsen</Authors>
   </PropertyGroup>
@@ -29,13 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pi.IO.Devices.SundewFork" Version="0.0.3-pre011" />
-    <PackageReference Include="Pi.IO.GeneralPurpose.SundewFork" Version="0.0.3-pre011" />
-    <PackageReference Include="Pi.IO.InterIntegratedCircuit.SundewFork" Version="0.0.3-pre011" />
-    <PackageReference Include="Pi.IO.Interop.SundewFork" Version="0.0.3-pre011" />
-    <PackageReference Include="Pi.IO.SerialPeripheralInterface.SundewFork" Version="0.0.3-pre011" />
-    <PackageReference Include="Pi.IO.SundewFork" Version="0.0.3-pre011" />
-    <PackageReference Include="Pi.System.SundewFork" Version="0.0.3-pre011" />
+    <PackageReference Include="Pi.IO.Devices.SundewFork" Version="0.0.3-pre012" />
+    <PackageReference Include="Pi.IO.GeneralPurpose.SundewFork" Version="0.0.3-pre012" />
+    <PackageReference Include="Pi.IO.InterIntegratedCircuit.SundewFork" Version="0.0.3-pre012" />
+    <PackageReference Include="Pi.IO.Interop.SundewFork" Version="0.0.3-pre012" />
+    <PackageReference Include="Pi.IO.SerialPeripheralInterface.SundewFork" Version="0.0.3-pre012" />
+    <PackageReference Include="Pi.IO.SundewFork" Version="0.0.3-pre012" />
+    <PackageReference Include="Pi.System.SundewFork" Version="0.0.3-pre012" />
   </ItemGroup>
 
   <ItemGroup>
