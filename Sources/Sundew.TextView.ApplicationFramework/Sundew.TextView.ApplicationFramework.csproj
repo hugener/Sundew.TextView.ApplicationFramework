@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<LangVersion>latest</LangVersion>
-	<Version>0.0.0-pre010</Version>
+	<Version>0.0.0-pre011</Version>
 	<Company>Hukano</Company>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<Authors>Kim Hugener-Ohlsen</Authors>
