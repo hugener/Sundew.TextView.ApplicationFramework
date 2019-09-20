@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<LangVersion>latest</LangVersion>
-	<Version>0.0.0-pre009</Version>
+	<Version>0.0.0-pre010</Version>
 	<Company>Hukano</Company>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<Authors>Kim Hugener-Ohlsen</Authors>
@@ -31,11 +31,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.1-beta.61">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Sundew.Base" Version="3.3.8" />
+    <PackageReference Include="Sundew.Base" Version="3.3.10" />
   </ItemGroup>
 
 </Project>
