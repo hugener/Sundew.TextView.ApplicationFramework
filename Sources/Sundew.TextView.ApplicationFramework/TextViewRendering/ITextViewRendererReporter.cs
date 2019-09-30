@@ -27,6 +27,15 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// <param name="oldTextView">The old text view.</param>
         void OnViewChanged(ITextView newTextView, ITextView oldTextView);
 
+        /// <summary>Called when a view has to render.</summary>
+        /// <param name="currentTextView">The current text view.</param>
+        void OnRender(ITextView currentTextView);
+
+        /// <summary>Called when [rendered].</summary>
+        /// <param name="currentTextView">The current text view.</param>
+        /// <param name="renderingContext">The rendering context.</param>
+        void OnRendered(ITextView currentTextView, IRenderingContext renderingContext);
+
         /// <summary>
         /// Called when the <see cref="TextViewRenderer"/> has stopped.
         /// </summary>
@@ -37,5 +46,27 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// </summary>
         /// <param name="exception">The exception.</param>
         void OnRendererException(Exception exception);
+
+        /// <summary>Waits for access to change the view.</summary>
+        void WaitingForAccessToChangeView();
+
+        /// <summary>Waits for rendering aborted.</summary>
+        /// <param name="view">The view.</param>
+        void WaitingForRenderingAborted(ITextView view);
+
+        /// <summary>Waits for access to render the view.</summary>
+        void WaitingForAccessToRenderView();
+
+        /// <summary>Acquired the view for rendering.</summary>
+        /// <param name="view">The view to be rendered.</param>
+        void AcquiredViewForRendering(ITextView view);
+
+        /// <summary> The rendering is being aborted.</summary>
+        /// <param name="view">The view.</param>
+        void AbortingRendering(ITextView view);
+
+        /// <summary>Waiting for the view to invalidate.</summary>
+        /// <param name="view">The view.</param>
+        void WaitingForViewToInvalidate(ITextView view);
     }
 }

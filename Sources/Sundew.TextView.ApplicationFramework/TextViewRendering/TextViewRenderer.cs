@@ -21,15 +21,16 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     /// Renders <see cref="ITextView"/> on to a text based LCD display.
     /// </summary>
     /// <seealso cref="T:IDisposable" />
-    public class TextViewRenderer : ITextViewRenderer
+    public sealed class TextViewRenderer : ITextViewRenderer
     {
         private readonly AsyncLock textViewLock = new AsyncLock();
         private readonly IRenderingContextFactory renderContextFactory;
         private readonly ITextViewRendererReporter textViewRendererReporter;
         private readonly ViewTimerCache viewTimerCache;
-        private readonly AutoResetEventAsync renderInterruptEvent = new AutoResetEventAsync(false);
+        private readonly AutoResetEventAsync abortRenderingEvent = new AutoResetEventAsync(false);
+        private readonly ManualResetEventAsync renderingEvent = new ManualResetEventAsync(false);
         private readonly ContinuousJob renderJob;
-        private IInvalidaterChecker invalidater = new Invalidater.NullInvalidater();
+        private IInvalidaterChecker invalidater = new Invalidater(null, false);
         private IRenderingContext renderingContext;
         private ICharacterContext characterContext;
 
@@ -75,7 +76,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
             }
 
             this.renderJob.Start();
-            this.renderInterruptEvent.Reset();
+            this.abortRenderingEvent.Reset();
             this.textViewRendererReporter?.Started();
         }
 
@@ -100,12 +101,15 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
             ITextView newTextView,
             Action<ITextView> onNavigatingAction)
         {
+            this.textViewRendererReporter?.WaitingForAccessToChangeView();
             using (await this.textViewLock.LockAsync())
             {
+                var oldView = this.CurrentTextView;
                 if (this.CurrentTextView != newTextView)
                 {
-                    this.renderInterruptEvent.Set();
-                    var oldView = this.CurrentTextView;
+                    this.abortRenderingEvent.Set();
+                    this.textViewRendererReporter?.WaitingForRenderingAborted(oldView);
+                    this.renderingEvent.Wait(Timeout.InfiniteTimeSpan);
                     if (oldView != null)
                     {
                         await oldView.OnClosingAsync();
@@ -114,16 +118,16 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
                     onNavigatingAction?.Invoke(oldView);
 
                     this.CurrentTextView = newTextView;
+
                     this.viewTimerCache.Reset();
-                    var newInvalidater = new Invalidater(this.viewTimerCache);
-                    this.invalidater = newInvalidater;
+                    this.invalidater.Dispose();
+                    this.invalidater = new Invalidater(this.viewTimerCache, true);
                     if (newTextView != null)
                     {
-                        await newTextView.OnShowingAsync(newInvalidater, this.characterContext);
+                        await newTextView.OnShowingAsync(this.invalidater, this.characterContext);
                     }
 
                     this.textViewRendererReporter?.OnViewChanged(newTextView, oldView);
-                    this.renderInterruptEvent.Reset();
                     return Result.Success(oldView);
                 }
 
@@ -133,33 +137,59 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
 
         private async Task RenderAsync(CancellationToken cancellationToken)
         {
-            if (this.invalidater.IsRenderRequiredAndReset())
+            this.textViewRendererReporter?.WaitingForAccessToRenderView();
+            this.renderingEvent.Set();
+            var currentTextView = await this.GetCurrentTextViewAsync(cancellationToken).ConfigureAwait(true);
+            if (currentTextView == null)
             {
-                var currentTextView = await this.GetCurrentTextViewAsync(cancellationToken);
-                if (currentTextView == null)
+                this.abortRenderingEvent.Wait(Timeout.InfiniteTimeSpan);
+                return;
+            }
+
+            this.textViewRendererReporter?.AcquiredViewForRendering(currentTextView);
+            while (true)
+            {
+                var abortRendering = await this.abortRenderingEvent.WaitAsync(TimeSpan.Zero, cancellationToken).ConfigureAwait(true);
+                if (abortRendering)
                 {
-                    return;
+                    this.textViewRendererReporter?.AbortingRendering(currentTextView);
+                    break;
                 }
 
-                if (await this.renderInterruptEvent.WaitAsync(TimeSpan.Zero, cancellationToken))
+                this.textViewRendererReporter?.WaitingForViewToInvalidate(currentTextView);
+                if (this.invalidater.WaitForInvalidatedAndReset())
                 {
-                    return;
-                }
+                    this.textViewRendererReporter?.OnRender(currentTextView);
+                    currentTextView.Render(this.renderingContext);
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                currentTextView.Render(this.renderingContext);
-                cancellationToken.ThrowIfCancellationRequested();
-
-                foreach (var renderInstruction in this.renderingContext)
-                {
-                    renderInstruction();
-                    if (await this.renderInterruptEvent.WaitAsync(TimeSpan.Zero, cancellationToken))
+                    foreach (var renderInstruction in this.renderingContext)
                     {
+                        renderInstruction();
+                        abortRendering = await this.abortRenderingEvent.WaitAsync(TimeSpan.Zero, cancellationToken).ConfigureAwait(true);
+                        if (abortRendering)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (abortRendering)
+                    {
+                        this.textViewRendererReporter?.AbortingRendering(currentTextView);
                         break;
                     }
-                }
 
-                this.renderingContext.Reset();
+                    this.textViewRendererReporter?.OnRendered(currentTextView, this.renderingContext);
+                    this.renderingContext.Reset();
+                }
+                else
+                {
+                    this.textViewRendererReporter?.AbortingRendering(currentTextView);
+                    break;
+                }
             }
+
+            this.renderingEvent.Reset();
         }
 
         private async Task<ITextView> GetCurrentTextViewAsync(CancellationToken cancellationToken)

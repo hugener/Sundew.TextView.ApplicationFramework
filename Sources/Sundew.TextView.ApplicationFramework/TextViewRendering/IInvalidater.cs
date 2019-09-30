@@ -23,6 +23,9 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// <summary>
         /// Indicates that the <see cref="ITextView"/> needs to be rendered.
         /// </summary>
-        void Invalidate();
+        /// <returns>
+        /// A value indicating whether an invalidater is still active.
+        /// </returns>
+        bool Invalidate();
     }
 }

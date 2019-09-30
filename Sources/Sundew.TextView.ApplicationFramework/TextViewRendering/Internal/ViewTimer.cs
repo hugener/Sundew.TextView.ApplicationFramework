@@ -5,7 +5,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sundew.TextView.ApplicationFramework.TextViewRendering
+namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Internal
 {
     using System;
     using System.Collections.Generic;
@@ -38,9 +38,9 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
             this.Start(startDelay, Timeout.InfiniteTimeSpan);
         }
 
-        public void Start(TimeSpan startDelay)
+        public void Start(TimeSpan startDelayAndInterval)
         {
-            this.Start(startDelay, this.Interval);
+            this.Start(startDelayAndInterval, startDelayAndInterval);
         }
 
         public void Start(TimeSpan startDelay, TimeSpan interval)

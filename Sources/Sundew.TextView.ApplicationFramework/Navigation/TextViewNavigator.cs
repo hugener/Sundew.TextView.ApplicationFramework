@@ -18,7 +18,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
     /// <summary>
     /// Navigates between <see cref="ITextView"/>.
     /// </summary>
-    public class TextViewNavigator : ITextViewNavigator
+    public sealed class TextViewNavigator : ITextViewNavigator
     {
         private static readonly object[] EmptyInputTargets = new object[0];
         private static readonly TextViewInfo EmptyTextViewInfo = new TextViewInfo(null, false);
@@ -68,9 +68,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// </summary>
         /// <param name="textView">The text view.</param>
         /// <returns>An async task with a value indicating whether the navigation was successful.</returns>
-        public async Task<bool> ShowAsync(ITextView textView)
+        public Task<bool> ShowAsync(ITextView textView)
         {
-            return await this.PrivateShowAsync(textView, null, false, EmptyInputTargets);
+            return this.PrivateShowAsync(textView, null, false, EmptyInputTargets);
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// </summary>
         /// <param name="textView">The text view.</param>
         /// <returns>An async task with a value indicating whether the navigation was successful.</returns>
-        public async Task<bool> ShowModalAsync(ITextView textView)
+        public Task<bool> ShowModalAsync(ITextView textView)
         {
-            return await this.PrivateShowAsync(textView, null, true, EmptyInputTargets);
+            return this.PrivateShowAsync(textView, null, true, EmptyInputTargets);
         }
 
         /// <summary>
@@ -91,9 +91,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public async Task<bool> ShowAsync(ITextView textView, Action<ITextView> onNavigatingAction)
+        public Task<bool> ShowAsync(ITextView textView, Action<ITextView> onNavigatingAction)
         {
-            return await this.PrivateShowAsync(textView, onNavigatingAction, false, EmptyInputTargets);
+            return this.PrivateShowAsync(textView, onNavigatingAction, false, EmptyInputTargets);
         }
 
         /// <summary>
@@ -104,9 +104,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public async Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction)
+        public Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction)
         {
-            return await this.PrivateShowAsync(textView, onNavigatingAction, true, EmptyInputTargets);
+            return this.PrivateShowAsync(textView, onNavigatingAction, true, EmptyInputTargets);
         }
 
         /// <summary>
@@ -115,9 +115,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <param name="textView">The text view.</param>
         /// <param name="additionalInputTargets">The additional input targets.</param>
         /// <returns>An async task with a value indicating whether the navigation was successful.</returns>
-        public async Task<bool> ShowModalAsync(ITextView textView, params object[] additionalInputTargets)
+        public Task<bool> ShowModalAsync(ITextView textView, params object[] additionalInputTargets)
         {
-            return await this.PrivateShowAsync(textView, null, true, additionalInputTargets);
+            return this.PrivateShowAsync(textView, null, true, additionalInputTargets);
         }
 
         /// <summary>
@@ -126,9 +126,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <param name="textView">The text view.</param>
         /// <param name="additionalInputTargets">The additional input targets.</param>
         /// <returns>An async task with a value indicating whether the navigation was successful.</returns>
-        public async Task<bool> ShowModalAsync(ITextView textView, IEnumerable<object> additionalInputTargets)
+        public Task<bool> ShowModalAsync(ITextView textView, IEnumerable<object> additionalInputTargets)
         {
-            return await this.PrivateShowAsync(textView, null, true, additionalInputTargets);
+            return this.PrivateShowAsync(textView, null, true, additionalInputTargets);
         }
 
         /// <summary>
@@ -140,9 +140,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public async Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, params object[] additionalInputTargets)
+        public Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, params object[] additionalInputTargets)
         {
-            return await this.PrivateShowAsync(textView, onNavigatingAction, true, additionalInputTargets);
+            return this.PrivateShowAsync(textView, onNavigatingAction, true, additionalInputTargets);
         }
 
         /// <summary>
@@ -154,9 +154,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public async Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, IEnumerable<object> additionalInputTargets)
+        public Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, IEnumerable<object> additionalInputTargets)
         {
-            return await this.PrivateShowAsync(textView, onNavigatingAction, true, additionalInputTargets);
+            return this.PrivateShowAsync(textView, onNavigatingAction, true, additionalInputTargets);
         }
 
         /// <summary>
@@ -187,9 +187,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// </summary>
         /// <param name="textView">The text view.</param>
         /// <returns>An async task with a value indicating whether the navigation was successful.</returns>
-        public async Task<bool> NavigateToModalAsync(ITextView textView)
+        public Task<bool> NavigateToModalAsync(ITextView textView)
         {
-            return await this.PrivateNavigateToAsync(textView, null, true, EmptyInputTargets);
+            return this.PrivateNavigateToAsync(textView, null, true, EmptyInputTargets);
         }
 
         /// <summary>
@@ -200,9 +200,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public async Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction)
+        public Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction)
         {
-            return await this.PrivateNavigateToAsync(textView, onNavigatingAction, true, EmptyInputTargets);
+            return this.PrivateNavigateToAsync(textView, onNavigatingAction, true, EmptyInputTargets);
         }
 
         /// <summary>
@@ -213,9 +213,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public async Task<bool> NavigateToModalAsync(ITextView textView, params object[] additionalInputTargets)
+        public Task<bool> NavigateToModalAsync(ITextView textView, params object[] additionalInputTargets)
         {
-            return await this.PrivateNavigateToAsync(textView, null, true, additionalInputTargets);
+            return this.PrivateNavigateToAsync(textView, null, true, additionalInputTargets);
         }
 
         /// <summary>
@@ -226,23 +226,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public async Task<bool> NavigateToModalAsync(ITextView textView, IEnumerable<object> additionalInputTargets)
+        public Task<bool> NavigateToModalAsync(ITextView textView, IEnumerable<object> additionalInputTargets)
         {
-            return await this.PrivateNavigateToAsync(textView, null, true, additionalInputTargets);
-        }
-
-        /// <summary>
-        /// Navigates to modal asynchronous.
-        /// </summary>
-        /// <param name="textView">The text view.</param>
-        /// <param name="onNavigatingAction">The on navigating action.</param>
-        /// <param name="additionalInputTargets">The additional input targets.</param>
-        /// <returns>
-        /// An async task with a value indicating whether the navigation was successful.
-        /// </returns>
-        public async Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, params object[] additionalInputTargets)
-        {
-            return await this.PrivateNavigateToAsync(textView, onNavigatingAction, true, additionalInputTargets);
+            return this.PrivateNavigateToAsync(textView, null, true, additionalInputTargets);
         }
 
         /// <summary>
@@ -254,9 +240,23 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public async Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, IEnumerable<object> additionalInputTargets)
+        public Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, params object[] additionalInputTargets)
         {
-            return await this.PrivateNavigateToAsync(textView, onNavigatingAction, true, additionalInputTargets);
+            return this.PrivateNavigateToAsync(textView, onNavigatingAction, true, additionalInputTargets);
+        }
+
+        /// <summary>
+        /// Navigates to modal asynchronous.
+        /// </summary>
+        /// <param name="textView">The text view.</param>
+        /// <param name="onNavigatingAction">The on navigating action.</param>
+        /// <param name="additionalInputTargets">The additional input targets.</param>
+        /// <returns>
+        /// An async task with a value indicating whether the navigation was successful.
+        /// </returns>
+        public Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, IEnumerable<object> additionalInputTargets)
+        {
+            return this.PrivateNavigateToAsync(textView, onNavigatingAction, true, additionalInputTargets);
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
                 this.showTextViewInfo = EmptyTextViewInfo;
                 onNavigatingAction?.Invoke(oldTextView);
             });
-            if (result && result.Value != null)
+            if (result)
             {
                 this.screenStack.Push(new TextViewInfo(textView, isModal));
                 if (isModal)

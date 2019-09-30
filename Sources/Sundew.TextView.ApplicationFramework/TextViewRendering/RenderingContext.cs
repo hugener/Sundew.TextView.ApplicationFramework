@@ -16,7 +16,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     /// Render context for rendering on an <see cref="ITextDisplayDevice"/>.
     /// </summary>
     /// <seealso cref="IRenderContext" />
-    public class RenderingContext : IRenderingContext
+    public sealed class RenderingContext : IRenderingContext
     {
         private readonly ITextDisplayDevice textDisplayDevice;
         private readonly LinkedList<Action> renderInstructions = new LinkedList<Action>();
@@ -69,6 +69,10 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// The cursor position.
         /// </value>
         public Point CursorPosition => this.textDisplayDevice.CursorPosition;
+
+        /// <summary>Gets the number of instructions.</summary>
+        /// <value>The number of instructions.</value>
+        public int InstructionCount => this.renderInstructions.Count;
 
         /// <summary>
         /// Writes the line.

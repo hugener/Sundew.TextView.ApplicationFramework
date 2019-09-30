@@ -5,7 +5,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sundew.TextView.ApplicationFramework.TextViewRendering
+namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Internal
 {
     using System;
     using System.Collections.Generic;

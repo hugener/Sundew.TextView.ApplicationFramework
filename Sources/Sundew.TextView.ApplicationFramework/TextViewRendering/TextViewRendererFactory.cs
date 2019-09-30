@@ -15,7 +15,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     /// Factory for creating a view renderer.
     /// </summary>
     /// <seealso cref="T:System.IDisposable" />
-    public class TextViewRendererFactory : ITextViewRendererFactory
+    public sealed class TextViewRendererFactory : ITextViewRendererFactory
     {
         private readonly DisposingList<ITextViewRenderer> textViewRenderers = new DisposingList<ITextViewRenderer>();
         private readonly ITextDisplayDevice textDisplayDevice;

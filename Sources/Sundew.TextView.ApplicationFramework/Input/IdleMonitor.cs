@@ -13,7 +13,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
     /// <summary>
     /// Tracks whether the application receives input or has activity.
     /// </summary>
-    public class IdleMonitor : IIdleMonitor
+    public sealed class IdleMonitor : IIdleMonitor
     {
         private readonly IActivityAggregator inputManagerAggregator;
         private readonly IActivityAggregator additionalInputAggregator;

@@ -8,6 +8,7 @@
 namespace Sundew.TextView.ApplicationFramework
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Sundew.Base.Disposal;
@@ -20,14 +21,14 @@ namespace Sundew.TextView.ApplicationFramework
     /// <summary>
     /// Represents an application.
     /// </summary>
-    public class Application : IApplication
+    public sealed class Application : IApplication
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private readonly List<IIdleMonitor> idleMonitors = new List<IIdleMonitor>();
         private readonly DisposingList<IDisposable> disposer = new DisposingList<IDisposable>();
         private ITextViewRendererFactory textViewRendererFactory;
         private ITextViewRenderer textViewRenderer;
         private InputManager inputManager;
-        private IdleMonitor idleMonitor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Application"/> class.
@@ -143,8 +144,10 @@ namespace Sundew.TextView.ApplicationFramework
             TimeSpan inputIdleTimeSpan,
             TimeSpan systemIdleTimeSpan)
         {
-            this.idleMonitor = new IdleMonitor(this.EnsureInputManager(), additionalInputAggregator, systemActivityAggregator, inputIdleTimeSpan, systemIdleTimeSpan, this.IdleMonitorReporter);
-            return this.idleMonitor;
+            var idleMonitor = new IdleMonitor(this.EnsureInputManager(), additionalInputAggregator, systemActivityAggregator, inputIdleTimeSpan, systemIdleTimeSpan, this.IdleMonitorReporter);
+            this.disposer.Add(idleMonitor);
+            this.idleMonitors.Add(idleMonitor);
+            return idleMonitor;
         }
 
         /// <summary>
@@ -154,7 +157,7 @@ namespace Sundew.TextView.ApplicationFramework
         {
             try
             {
-                this.idleMonitor?.Start();
+                this.idleMonitors.ForEach(x => x.Start());
                 Task.Delay(Timeout.InfiniteTimeSpan, this.cancellationTokenSource.Token).Wait(this.cancellationTokenSource.Token);
             }
             catch (OperationCanceledException)
@@ -163,7 +166,6 @@ namespace Sundew.TextView.ApplicationFramework
             finally
             {
                 Console.CancelKeyPress -= this.OnConsoleCancelKeyPress;
-                this.idleMonitor?.Dispose();
                 this.disposer.Dispose();
             }
         }

@@ -15,7 +15,7 @@ namespace Sundew.TextView.ApplicationFramework.DeviceInterface
     /// Uses the console as a display device.
     /// </summary>
     /// <seealso cref="ITextDisplayDevice" />
-    public class ConsoleDisplayDevice : ITextDisplayDevice
+    public sealed class ConsoleDisplayDevice : ITextDisplayDevice
     {
         /// <summary>
         /// Gets or sets a value indicating whether cursor is enabled.

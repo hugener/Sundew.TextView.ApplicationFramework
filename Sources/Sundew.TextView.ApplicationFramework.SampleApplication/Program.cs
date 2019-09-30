@@ -1,4 +1,6 @@
-﻿namespace Sundew.TextView.ApplicationFramework.SampleApplication
+﻿using System.Threading;
+
+namespace Sundew.TextView.ApplicationFramework.SampleApplication
 {
     using System.Threading.Tasks;
     using Sundew.TextView.ApplicationFramework.DeviceInterface;

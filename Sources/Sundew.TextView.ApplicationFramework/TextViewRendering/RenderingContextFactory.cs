@@ -14,7 +14,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     /// Rendering context factory for an <see cref="ITextDisplayDevice"/> display.
     /// </summary>
     /// <seealso cref="IRenderingContextFactory" />
-    public class RenderingContextFactory : IRenderingContextFactory
+    public sealed class RenderingContextFactory : IRenderingContextFactory
     {
         private readonly ITextDisplayDevice textDisplayDevice;
 

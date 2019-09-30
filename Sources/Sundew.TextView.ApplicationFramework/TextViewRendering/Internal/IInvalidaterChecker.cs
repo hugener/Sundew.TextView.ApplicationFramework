@@ -7,17 +7,19 @@
 
 namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Internal
 {
+    using System;
+
     /// <summary>
     /// Interface for checking if the current <see cref="ITextView"/> should be rendered.
     /// </summary>
-    internal interface IInvalidaterChecker
+    internal interface IInvalidaterChecker : IInvalidater, IDisposable
     {
         /// <summary>
-        /// Determines whether [is render required and reset].
+        /// Waits until the invalidater is invalidated and resets it.
         /// </summary>
         /// <returns>
         ///   <c>true</c> if [is render required and reset]; otherwise, <c>false</c>.
         /// </returns>
-        bool IsRenderRequiredAndReset();
+        bool WaitForInvalidatedAndReset();
     }
 }

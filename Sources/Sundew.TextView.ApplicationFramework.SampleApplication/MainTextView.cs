@@ -20,7 +20,7 @@ namespace Sundew.TextView.ApplicationFramework.SampleApplication
 
         public Task OnShowingAsync(IInvalidater invalidater, ICharacterContext characterContext)
         {
-            this.busySpinner = new BusySpinner(invalidater, TimeSpan.FromMilliseconds(150));
+            this.busySpinner = new BusySpinner(invalidater, TimeSpan.FromMilliseconds(15));
             return Task.CompletedTask;
         }
 

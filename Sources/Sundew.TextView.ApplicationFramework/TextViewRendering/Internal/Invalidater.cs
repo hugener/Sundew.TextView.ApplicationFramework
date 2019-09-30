@@ -9,13 +9,15 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Internal
 {
     using System.Threading;
 
-    internal class Invalidater : IInvalidaterChecker, IInvalidater
+    internal sealed class Invalidater : IInvalidaterChecker
     {
         private readonly ViewTimerCache viewTimerCache;
-        private int invalidate = 1;
+        private AutoResetEvent autoResetEvent;
+        private int isActive = 1;
 
-        public Invalidater(ViewTimerCache viewTimerCache)
+        public Invalidater(ViewTimerCache viewTimerCache, bool initialState)
         {
+            this.autoResetEvent = new AutoResetEvent(initialState);
             this.viewTimerCache = viewTimerCache;
         }
 
@@ -24,22 +26,36 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Internal
             return this.viewTimerCache.GetOrCreate();
         }
 
-        public bool IsRenderRequiredAndReset()
+        public bool WaitForInvalidatedAndReset()
         {
-            return Interlocked.Exchange(ref this.invalidate, 0) == 1;
-        }
-
-        public void Invalidate()
-        {
-            Interlocked.Exchange(ref this.invalidate, 1);
-        }
-
-        internal class NullInvalidater : IInvalidaterChecker
-        {
-            public bool IsRenderRequiredAndReset()
+            var isActuallyActive = this.isActive > 0;
+            if (isActuallyActive)
             {
-                return false;
+                this.autoResetEvent?.WaitOne(Timeout.InfiniteTimeSpan);
             }
+
+            return isActuallyActive;
+        }
+
+        public bool Invalidate()
+        {
+            if (this.isActive > 0)
+            {
+                this.autoResetEvent?.Set();
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+        public void Dispose()
+        {
+            Interlocked.Exchange(ref this.isActive, 0);
+            var resetEvent = this.autoResetEvent;
+            this.autoResetEvent = null;
+            resetEvent.Set();
+            resetEvent.Dispose();
         }
     }
 }
