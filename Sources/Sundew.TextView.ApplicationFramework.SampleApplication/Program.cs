@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace Sundew.TextView.ApplicationFramework.SampleApplication
+﻿namespace Sundew.TextView.ApplicationFramework.SampleApplication
 {
     using System.Threading.Tasks;
     using Sundew.TextView.ApplicationFramework.DeviceInterface;
@@ -11,7 +9,11 @@ namespace Sundew.TextView.ApplicationFramework.SampleApplication
         {
             var application = new Application();
             var textViewNavigator = application.StartRendering(new ConsoleDisplayDevice());
-            await textViewNavigator.NavigateToAsync(new MainTextView());
+            await textViewNavigator.NavigateToModalAsync(new MainTextView());
+            await Task.Delay(500);
+            await textViewNavigator.NavigateToModalAsync(new View2());
+            await Task.Delay(500);
+            await textViewNavigator.NavigateBackAsync();
             application.Run();
         }
     }

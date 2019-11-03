@@ -42,6 +42,24 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// </value>
         public int Height { get; }
 
+        /// <summary>Implements the operator ==.</summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator ==(Size left, Size right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>Implements the operator !=.</summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(Size left, Size right)
+        {
+            return !(left == right);
+        }
+
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>

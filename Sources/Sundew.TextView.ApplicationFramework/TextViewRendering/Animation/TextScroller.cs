@@ -24,7 +24,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Animation
         private readonly TimeSpan interval;
         private readonly TimeSpan endDelay;
         private readonly IViewTimer viewTimer;
-        private readonly ScrollData scrollData = new ScrollData(null, 0, Direction.Right, 0);
+        private readonly ScrollData scrollData = new ScrollData(string.Empty, 0, Direction.Right, 0);
         private string frame = string.Empty;
 
         /// <summary>

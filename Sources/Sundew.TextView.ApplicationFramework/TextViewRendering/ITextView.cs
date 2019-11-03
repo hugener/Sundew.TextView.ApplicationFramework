@@ -21,7 +21,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// <value>
         /// The input targets.
         /// </value>
-        IEnumerable<object> InputTargets { get; }
+        IEnumerable<object>? InputTargets { get; }
 
         /// <summary>
         /// Called when is showing.
@@ -31,13 +31,13 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// <returns>
         /// An async task.
         /// </returns>
-        Task OnShowingAsync(IInvalidater invalidater, ICharacterContext characterContext);
+        Task OnShowingAsync(IInvalidater invalidater, ICharacterContext? characterContext);
 
         /// <summary>
         /// Called when the text view should render.
         /// </summary>
         /// <param name="renderContext">The render context.</param>
-        void Render(IRenderContext renderContext);
+        void OnDraw(IRenderContext renderContext);
 
         /// <summary>
         /// Called when the view is closing.

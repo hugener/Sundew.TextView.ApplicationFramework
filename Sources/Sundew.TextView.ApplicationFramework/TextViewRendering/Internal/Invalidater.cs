@@ -7,12 +7,13 @@
 
 namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Internal
 {
+    using System;
     using System.Threading;
 
     internal sealed class Invalidater : IInvalidaterChecker
     {
         private readonly ViewTimerCache viewTimerCache;
-        private AutoResetEvent autoResetEvent;
+        private AutoResetEvent? autoResetEvent;
         private int isActive = 1;
 
         public Invalidater(ViewTimerCache viewTimerCache, bool initialState)
@@ -54,8 +55,35 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Internal
             Interlocked.Exchange(ref this.isActive, 0);
             var resetEvent = this.autoResetEvent;
             this.autoResetEvent = null;
-            resetEvent.Set();
-            resetEvent.Dispose();
+            if (resetEvent != null)
+            {
+                resetEvent.Set();
+                resetEvent.Dispose();
+            }
+        }
+
+        internal class NullInvalidater : IInvalidaterChecker
+        {
+            private const string NullInvaliderCannotCreateTimersText = "NullInvalider cannot create timers.";
+
+            public IViewTimer CreateTimer()
+            {
+                throw new NotSupportedException(NullInvaliderCannotCreateTimersText);
+            }
+
+            public bool Invalidate()
+            {
+                return false;
+            }
+
+            public void Dispose()
+            {
+            }
+
+            public bool WaitForInvalidatedAndReset()
+            {
+                return false;
+            }
         }
     }
 }

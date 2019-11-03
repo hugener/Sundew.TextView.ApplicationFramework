@@ -21,7 +21,7 @@ namespace Sundew.TextView.ApplicationFramework
         /// <value>
         /// The idle controller reporter.
         /// </value>
-        IIdleMonitorReporter IdleMonitorReporter { get; set; }
+        IIdleMonitorReporter? IdleMonitorReporter { get; set; }
 
         /// <summary>
         /// Starts the input handling.
@@ -44,7 +44,7 @@ namespace Sundew.TextView.ApplicationFramework
         /// <param name="systemIdleTimeSpan">The system idle time span.</param>
         /// <returns>An <see cref="IdleMonitor" />.</returns>
         IIdleMonitor CreateIdleMonitoring(
-            IActivityAggregator additionalInputAggregator,
+            IActivityAggregator? additionalInputAggregator,
             IActivityAggregator systemActivityAggregator,
             TimeSpan inputIdleTimeSpan,
             TimeSpan systemIdleTimeSpan);

@@ -21,7 +21,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Animation
         private readonly IInvalidater invalidater;
         private readonly TimeSpan interval;
         private readonly IViewTimer viewTimer;
-        private string text;
+        private string text = string.Empty;
         private bool isShowing = true;
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Animation
                 this.isShowing = true;
             }
 
-            var actualText = this.text ?? string.Empty;
+            var actualText = this.text;
             return this.isShowing
                 ? actualText
                 : Space.Repeat(actualText.Length);

@@ -15,12 +15,12 @@ namespace Sundew.TextView.ApplicationFramework.Input
     /// </summary>
     public sealed class IdleMonitor : IIdleMonitor
     {
-        private readonly IActivityAggregator inputManagerAggregator;
-        private readonly IActivityAggregator additionalInputAggregator;
+        private readonly IActivityAggregator? inputManagerAggregator;
+        private readonly IActivityAggregator? additionalInputAggregator;
         private readonly IActivityAggregator activityAggregator;
         private readonly TimeSpan inputIdleTimeSpan;
         private readonly TimeSpan systemIdleTimeSpan;
-        private readonly IIdleMonitorReporter idleMonitorReporter;
+        private readonly IIdleMonitorReporter? idleMonitorReporter;
         private readonly object lockObject = new object();
         private readonly ITimer inputIdleTimer;
         private readonly ITimer systemIdleTimer;
@@ -71,12 +71,12 @@ namespace Sundew.TextView.ApplicationFramework.Input
         /// <param name="systemIdleTimeSpan">The system idle time span.</param>
         /// <param name="idleMonitorReporter">The idle controller observer.</param>
         public IdleMonitor(
-            IActivityAggregator inputManagerAggregator,
-            IActivityAggregator additionalInputAggregator,
+            IActivityAggregator? inputManagerAggregator,
+            IActivityAggregator? additionalInputAggregator,
             IActivityAggregator activityAggregator,
             TimeSpan inputIdleTimeSpan,
             TimeSpan systemIdleTimeSpan,
-            IIdleMonitorReporter idleMonitorReporter)
+            IIdleMonitorReporter? idleMonitorReporter)
         {
             this.inputManagerAggregator = inputManagerAggregator;
             this.additionalInputAggregator = additionalInputAggregator;
@@ -95,17 +95,17 @@ namespace Sundew.TextView.ApplicationFramework.Input
         /// <summary>
         /// Occurs when the application has not received input for a given time.
         /// </summary>
-        public event EventHandler InputIdle;
+        public event EventHandler? InputIdle;
 
         /// <summary>
         /// Occurs when the application has not had activity for a given time.
         /// </summary>
-        public event EventHandler SystemIdle;
+        public event EventHandler? SystemIdle;
 
         /// <summary>
         /// Occurs when the application received input after being idle.
         /// </summary>
-        public event EventHandler<ActivatedEventArgs> Activated;
+        public event EventHandler<ActivatedEventArgs>? Activated;
 
         /// <summary>
         /// Gets a value indicating whether this instance is input idle.
@@ -128,11 +128,13 @@ namespace Sundew.TextView.ApplicationFramework.Input
 
             if (this.inputManagerAggregator != null)
             {
+                this.inputManagerAggregator.ActivityOccured -= this.OnInputActivity;
                 this.inputManagerAggregator.ActivityOccured += this.OnInputActivity;
             }
 
             if (this.additionalInputAggregator != null)
             {
+                this.additionalInputAggregator.ActivityOccured -= this.OnInputActivity;
                 this.additionalInputAggregator.ActivityOccured += this.OnInputActivity;
             }
 

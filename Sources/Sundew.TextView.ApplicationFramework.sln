@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sundew.TextView.ApplicationFramework", "Sundew.TextView.ApplicationFramework\Sundew.TextView.ApplicationFramework.csproj", "{CBA69EFA-B22B-4423-AF70-F0FC9B8AF653}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sundew.TextView.ApplicationFramework.Tests", "Sundew.TextView.ApplicationFramework.Tests\Sundew.TextView.ApplicationFramework.Tests.csproj", "{804A009E-E69F-4937-8F35-FD12D5F35DC3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sundew.TextView.Pi.Drivers", "Sundew.TextView.Pi.Drivers\Sundew.TextView.Pi.Drivers.csproj", "{46A8EB5E-18B1-4E6C-A668-8AF39EC91126}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sundew.TextView.Iot.Devices.Drivers", "Sundew.TextView.Iot.Devices.Drivers\Sundew.TextView.Iot.Devices.Drivers.csproj", "{AEFADDC6-22EB-4871-9B10-4D0C1CF74B5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{46A8EB5E-18B1-4E6C-A668-8AF39EC91126}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A8EB5E-18B1-4E6C-A668-8AF39EC91126}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46A8EB5E-18B1-4E6C-A668-8AF39EC91126}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEFADDC6-22EB-4871-9B10-4D0C1CF74B5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFADDC6-22EB-4871-9B10-4D0C1CF74B5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFADDC6-22EB-4871-9B10-4D0C1CF74B5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFADDC6-22EB-4871-9B10-4D0C1CF74B5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

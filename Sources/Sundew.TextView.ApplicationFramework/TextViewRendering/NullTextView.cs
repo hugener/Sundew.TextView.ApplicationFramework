@@ -1,21 +1,20 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EmptyTextView.cs" company="Hukano">
+// <copyright file="NullTextView.cs" company="Hukano">
 // Copyright (c) Hukano. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sundew.TextView.ApplicationFramework.Navigation
+namespace Sundew.TextView.ApplicationFramework.TextViewRendering
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Sundew.TextView.ApplicationFramework.TextViewRendering;
 
     /// <summary>
     /// A text view with no content. The view is cleared.
     /// </summary>
     /// <seealso cref="ITextView" />
-    internal class EmptyTextView : ITextView
+    internal class NullTextView : ITextView
     {
         /// <summary>
         /// Gets the input targets.
@@ -23,7 +22,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <value>
         /// The input targets.
         /// </value>
-        public IEnumerable<object> InputTargets { get; } = null;
+        public IEnumerable<object>? InputTargets => null;
 
         /// <summary>
         /// Called when is showing.
@@ -33,7 +32,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task.
         /// </returns>
-        public Task OnShowingAsync(IInvalidater invalidater, ICharacterContext characterContext)
+        public Task OnShowingAsync(IInvalidater invalidater, ICharacterContext? characterContext)
         {
             return Task.CompletedTask;
         }
@@ -42,7 +41,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// Called when the text view should render.
         /// </summary>
         /// <param name="renderContext">The render context.</param>
-        public void Render(IRenderContext renderContext)
+        public void OnDraw(IRenderContext renderContext)
         {
             renderContext.Clear();
         }

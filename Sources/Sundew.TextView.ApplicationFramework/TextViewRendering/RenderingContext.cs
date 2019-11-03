@@ -74,6 +74,10 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// <value>The number of instructions.</value>
         public int InstructionCount => this.renderInstructions.Count;
 
+        /// <summary>Gets the instructions.</summary>
+        /// <value>The instructions.</value>
+        public IEnumerable<Action> Instructions => this.renderInstructions;
+
         /// <summary>
         /// Writes the line.
         /// </summary>
@@ -149,25 +153,11 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         }
 
         /// <summary>
-        /// Gets the enumerator.
-        /// </summary>
-        /// <returns>The render instructions.</returns>
-        public IEnumerator<Action> GetEnumerator()
-        {
-            return this.renderInstructions.GetEnumerator();
-        }
-
-        /// <summary>
         /// Resets this instance.
         /// </summary>
         public void Reset()
         {
             this.renderInstructions.Clear();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
         }
     }
 }

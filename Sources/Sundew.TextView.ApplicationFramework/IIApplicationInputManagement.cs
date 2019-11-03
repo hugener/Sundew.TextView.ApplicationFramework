@@ -20,7 +20,7 @@ namespace Sundew.TextView.ApplicationFramework
         /// <value>
         /// The input manager reporter.
         /// </value>
-        IInputManagerReporter InputManagerReporter { get; set; }
+        IInputManagerReporter? InputManagerReporter { get; set; }
 
         /// <summary>
         /// Gets the input manager.

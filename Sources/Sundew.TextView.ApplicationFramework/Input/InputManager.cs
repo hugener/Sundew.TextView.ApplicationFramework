@@ -18,14 +18,14 @@ namespace Sundew.TextView.ApplicationFramework.Input
     public sealed class InputManager : IInputManager
     {
         private readonly ConcurrentStack<List<object>> inputTargetStack = new ConcurrentStack<List<object>>();
-        private readonly IInputManagerReporter inputManagerReporter;
-        private List<object> temporaryInputTargets;
+        private readonly IInputManagerReporter? inputManagerReporter;
+        private List<object>? temporaryInputTargets;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InputManager" /> class.
         /// </summary>
         /// <param name="inputManagerReporter">The input manager logger.</param>
-        public InputManager(IInputManagerReporter inputManagerReporter = null)
+        public InputManager(IInputManagerReporter? inputManagerReporter = null)
         {
             this.inputManagerReporter = inputManagerReporter;
             this.inputManagerReporter?.SetSource(this);
@@ -34,7 +34,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
         /// <summary>
         /// Occurs when there is activity in the application.
         /// </summary>
-        public event EventHandler<EventArgs> ActivityOccured;
+        public event EventHandler<EventArgs>? ActivityOccured;
 
         /// <summary>
         /// Starts an input context.
@@ -51,7 +51,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
                     actualInputTarget?.OnDeactivated();
                 });
 
-                this.inputManagerReporter.EndedInputContext(previousInputTargets);
+                this.inputManagerReporter?.EndedInputContext(previousInputTargets);
             }
 
             var newInputTargets = inputTargets.ToList();
@@ -161,8 +161,8 @@ namespace Sundew.TextView.ApplicationFramework.Input
         /// <param name="eventArgs">The event args instance containing the event data.</param>
         public void Raise<TEventArgs>(InputEvent<TEventArgs> inputEvent, object sender, TEventArgs eventArgs)
         {
-            this.ActivityOccured?.Invoke(this, EventArgs.Empty);
             this.inputManagerReporter?.RaisingEvent(inputEvent, eventArgs);
+            this.ActivityOccured?.Invoke(this, EventArgs.Empty);
             inputEvent.RaiseGlobal(sender, eventArgs);
 
             if (this.TryPeekCurrentTarget(out var inputTargets))
@@ -196,7 +196,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
                 return true;
             }
 
-            return this.inputTargetStack.TryPeek(out inputTargets);
+            return this.inputTargetStack.TryPop(out inputTargets);
         }
     }
 }

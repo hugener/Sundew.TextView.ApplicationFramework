@@ -17,7 +17,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
     public class InputEvent<TEventArgs>
     {
         private readonly ConcurrentDictionary<object, EventHandler<TEventArgs>> targetEventHandlers = new ConcurrentDictionary<object, EventHandler<TEventArgs>>();
-        private EventHandler<TEventArgs> alwaysEventHandlers;
+        private EventHandler<TEventArgs>? alwaysEventHandlers;
 
         /// <summary>
         /// Registers the specified target.

@@ -7,6 +7,7 @@
 
 namespace Sundew.TextView.ApplicationFramework
 {
+    using System;
     using Sundew.TextView.ApplicationFramework.DeviceInterface;
     using Sundew.TextView.ApplicationFramework.Navigation;
     using Sundew.TextView.ApplicationFramework.TextViewRendering;
@@ -22,7 +23,11 @@ namespace Sundew.TextView.ApplicationFramework
         /// <value>
         /// The text view renderer reporter.
         /// </value>
-        ITextViewRendererReporter TextViewRendererReporter { get; set; }
+        ITextViewRendererReporter? TextViewRendererReporter { get; set; }
+
+        /// <summary>Gets or sets the time interval synchronizer reporter.</summary>
+        /// <value>The time interval synchronizer reporter.</value>
+        ITimeIntervalSynchronizerReporter? TimeIntervalSynchronizerReporter { get; set; }
 
         /// <summary>
         /// Starts the rendering.
@@ -37,5 +42,19 @@ namespace Sundew.TextView.ApplicationFramework
         /// <param name="textViewRendererFactory">The text view renderer factory.</param>
         /// <returns>A <see cref="TextViewNavigator"/>.</returns>
         ITextViewNavigator StartRendering(ITextViewRendererFactory textViewRendererFactory);
+
+        /// <summary>
+        /// Starts the rendering.
+        /// </summary>
+        /// <param name="textDisplayDevice">The text display device.</param>
+        /// <param name="refreshInterval">The refresh interval.</param>
+        /// <returns>A <see cref="TextViewNavigator" />.</returns>
+        ITextViewNavigator StartRendering(ITextDisplayDevice textDisplayDevice, TimeSpan refreshInterval);
+
+        /// <summary>Starts the rendering.</summary>
+        /// <param name="textViewRendererFactory">The text view renderer factory.</param>
+        /// <param name="refreshInterval">The refresh interval.</param>
+        /// <returns>A <see cref="TextViewNavigator"/>.</returns>
+        ITextViewNavigator StartRendering(ITextViewRendererFactory textViewRendererFactory, TimeSpan refreshInterval);
     }
 }

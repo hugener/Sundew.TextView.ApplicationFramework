@@ -29,7 +29,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
 
         /// <summary>Called when a view has to render.</summary>
         /// <param name="currentTextView">The current text view.</param>
-        void OnRender(ITextView currentTextView);
+        void OnDraw(ITextView currentTextView);
 
         /// <summary>Called when [rendered].</summary>
         /// <param name="currentTextView">The current text view.</param>
@@ -48,7 +48,8 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         void OnRendererException(Exception exception);
 
         /// <summary>Waits for access to change the view.</summary>
-        void WaitingForAccessToChangeView();
+        /// <param name="newTextView">The new text view.</param>
+        void WaitingForAccessToChangeViewTo(ITextView newTextView);
 
         /// <summary>Waits for rendering aborted.</summary>
         /// <param name="view">The view.</param>
@@ -68,5 +69,9 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// <summary>Waiting for the view to invalidate.</summary>
         /// <param name="view">The view.</param>
         void WaitingForViewToInvalidate(ITextView view);
+
+        /// <summary>Views the already set.</summary>
+        /// <param name="newTextView">The new text view.</param>
+        void ViewAlreadySet(ITextView newTextView);
     }
 }

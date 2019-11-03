@@ -16,17 +16,22 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     public interface ITextViewRendererFactory : IDisposable
     {
         /// <summary>
-        /// Creates a new <see cref="ITextViewRenderer" />.
-        /// </summary>
-        /// <returns>
-        /// A new <see cref="ITextViewRenderer" />.
-        /// </returns>
-        ITextViewRenderer Create();
-
-        /// <summary>
         /// Disposes the specified text view renderer.
         /// </summary>
         /// <param name="textViewRenderer">The text view renderer.</param>
         void Dispose(ITextViewRenderer textViewRenderer);
+
+        /// <summary>
+        /// Gets the textView renderer.
+        /// </summary>
+        /// <value>The textView renderer.</value>
+        /// <returns>A new <see cref="ITextViewRenderer"/>.</returns>
+        ITextViewRenderer Create();
+
+        /// <summary>Gets the textView renderer.</summary>
+        /// <param name="refreshInterval">The refresh interval.</param>
+        /// <value>The textView renderer.</value>
+        /// <returns>A new <see cref="ITextViewRenderer"/>.</returns>
+        ITextViewRenderer Create(TimeSpan refreshInterval);
     }
 }

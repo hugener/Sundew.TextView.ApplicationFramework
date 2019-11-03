@@ -20,33 +20,40 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     /// <summary>
     /// Renders <see cref="ITextView"/> on to a text based LCD display.
     /// </summary>
-    /// <seealso cref="T:IDisposable" />
+    /// <seealso cref="IDisposable" />
     public sealed class TextViewRenderer : ITextViewRenderer
     {
+        private static readonly ITextView EmptyTextView = new NullTextView();
         private readonly AsyncLock textViewLock = new AsyncLock();
         private readonly IRenderingContextFactory renderContextFactory;
-        private readonly ITextViewRendererReporter textViewRendererReporter;
+        private readonly ITextViewRendererReporter? textViewRendererReporter;
         private readonly ViewTimerCache viewTimerCache;
         private readonly AutoResetEventAsync abortRenderingEvent = new AutoResetEventAsync(false);
         private readonly ManualResetEventAsync renderingEvent = new ManualResetEventAsync(false);
         private readonly ContinuousJob renderJob;
-        private IInvalidaterChecker invalidater = new Invalidater(null, false);
-        private IRenderingContext renderingContext;
-        private ICharacterContext characterContext;
+        private readonly TimeIntervalSynchronizer timeIntervalSynchronizer;
+        private IInvalidaterChecker invalidater = new Invalidater.NullInvalidater();
+        private IRenderingContext renderingContext = default!;
+        private ICharacterContext? characterContext;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextViewRenderer" /> class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the <see cref="TextViewRenderer"/> class.</summary>
         /// <param name="renderContextFactory">The render context factory.</param>
         /// <param name="timerFactory">The timer factory.</param>
+        /// <param name="refreshInterval">The refresh interval.</param>
         /// <param name="textViewRendererReporter">The textView renderer logger.</param>
-        public TextViewRenderer(IRenderingContextFactory renderContextFactory, ITimerFactory timerFactory, ITextViewRendererReporter textViewRendererReporter)
+        /// <param name="timeIntervalSynchronizerReporter">The time interval synchronizer reporter.</param>
+        public TextViewRenderer(IRenderingContextFactory renderContextFactory, ITimerFactory timerFactory, TimeSpan refreshInterval, ITextViewRendererReporter? textViewRendererReporter = null, ITimeIntervalSynchronizerReporter? timeIntervalSynchronizerReporter = null)
         {
             this.renderContextFactory = renderContextFactory;
             this.textViewRendererReporter = textViewRendererReporter;
+            this.timeIntervalSynchronizer = new TimeIntervalSynchronizer(timeIntervalSynchronizerReporter)
+            {
+                Interval = refreshInterval,
+            };
             this.viewTimerCache = new ViewTimerCache(timerFactory);
             this.renderJob = new ContinuousJob(this.RenderAsync, e => this.textViewRendererReporter?.OnRendererException(e));
             this.textViewRendererReporter?.SetSource(this);
+            this.CurrentTextView = EmptyTextView;
         }
 
         /// <summary>
@@ -71,7 +78,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
             {
                 this.renderingContext = this.renderContextFactory.CreateRenderingContext();
                 this.renderingContext.Clear();
-                this.renderingContext.ForEach(renderInstruction => renderInstruction());
+                this.renderingContext.Instructions.ForEach(renderInstruction => renderInstruction());
                 this.characterContext = this.renderContextFactory.TryCreateCustomCharacterBuilder().Value;
             }
 
@@ -85,7 +92,13 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         {
             this.renderJob.Dispose();
             this.viewTimerCache.Dispose();
-            this.CurrentTextView = null;
+            using (this.textViewLock.Lock())
+            {
+                this.CurrentTextView = EmptyTextView;
+            }
+
+            this.textViewLock.Dispose();
+            this.invalidater.Dispose();
             this.textViewRendererReporter?.Stopped();
         }
 
@@ -99,10 +112,10 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// </returns>
         public async Task<Result<ITextView, SetTextViewError>> TrySetViewAsync(
             ITextView newTextView,
-            Action<ITextView> onNavigatingAction)
+            Action<ITextView>? onNavigatingAction)
         {
-            this.textViewRendererReporter?.WaitingForAccessToChangeView();
-            using (await this.textViewLock.LockAsync())
+            this.textViewRendererReporter?.WaitingForAccessToChangeViewTo(newTextView);
+            using (await this.textViewLock.LockAsync().ConfigureAwait(true))
             {
                 var oldView = this.CurrentTextView;
                 if (this.CurrentTextView != newTextView)
@@ -110,27 +123,22 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
                     this.abortRenderingEvent.Set();
                     this.textViewRendererReporter?.WaitingForRenderingAborted(oldView);
                     this.renderingEvent.Wait(Timeout.InfiniteTimeSpan);
-                    if (oldView != null)
-                    {
-                        await oldView.OnClosingAsync();
-                    }
+                    await oldView.OnClosingAsync().ConfigureAwait(true);
 
+                    this.viewTimerCache.Reset();
+                    this.invalidater?.Dispose();
                     onNavigatingAction?.Invoke(oldView);
 
                     this.CurrentTextView = newTextView;
 
-                    this.viewTimerCache.Reset();
-                    this.invalidater.Dispose();
                     this.invalidater = new Invalidater(this.viewTimerCache, true);
-                    if (newTextView != null)
-                    {
-                        await newTextView.OnShowingAsync(this.invalidater, this.characterContext);
-                    }
+                    await newTextView.OnShowingAsync(this.invalidater, this.characterContext).ConfigureAwait(true);
 
                     this.textViewRendererReporter?.OnViewChanged(newTextView, oldView);
                     return Result.Success(oldView);
                 }
 
+                this.textViewRendererReporter?.ViewAlreadySet(newTextView);
                 return Result.Error(SetTextViewError.AlreadySet);
             }
         }
@@ -149,8 +157,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
             this.textViewRendererReporter?.AcquiredViewForRendering(currentTextView);
             while (true)
             {
-                var abortRendering = await this.abortRenderingEvent.WaitAsync(TimeSpan.Zero, cancellationToken).ConfigureAwait(true);
-                if (abortRendering)
+                if (await this.abortRenderingEvent.WaitAsync(TimeSpan.Zero, cancellationToken).ConfigureAwait(true))
                 {
                     this.textViewRendererReporter?.AbortingRendering(currentTextView);
                     break;
@@ -159,28 +166,24 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
                 this.textViewRendererReporter?.WaitingForViewToInvalidate(currentTextView);
                 if (this.invalidater.WaitForInvalidatedAndReset())
                 {
-                    this.textViewRendererReporter?.OnRender(currentTextView);
-                    currentTextView.Render(this.renderingContext);
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    foreach (var renderInstruction in this.renderingContext)
-                    {
-                        renderInstruction();
-                        abortRendering = await this.abortRenderingEvent.WaitAsync(TimeSpan.Zero, cancellationToken).ConfigureAwait(true);
-                        if (abortRendering)
-                        {
-                            break;
-                        }
-                    }
-
-                    if (abortRendering)
+                    if (await this.timeIntervalSynchronizer.SynchronizeAsync(this.abortRenderingEvent, cancellationToken).ConfigureAwait(true))
                     {
                         this.textViewRendererReporter?.AbortingRendering(currentTextView);
                         break;
                     }
 
-                    this.textViewRendererReporter?.OnRendered(currentTextView, this.renderingContext);
-                    this.renderingContext.Reset();
+                    var actualRenderContext = this.renderingContext!;
+                    this.textViewRendererReporter?.OnDraw(currentTextView);
+                    currentTextView.OnDraw(actualRenderContext);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    foreach (var renderInstruction in actualRenderContext.Instructions)
+                    {
+                        renderInstruction();
+                    }
+
+                    this.textViewRendererReporter?.OnRendered(currentTextView, actualRenderContext);
+                    actualRenderContext.Reset();
                 }
                 else
                 {
@@ -192,9 +195,9 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
             this.renderingEvent.Reset();
         }
 
-        private async Task<ITextView> GetCurrentTextViewAsync(CancellationToken cancellationToken)
+        private async Task<ITextView?> GetCurrentTextViewAsync(CancellationToken cancellationToken)
         {
-            using (var lockResult = await this.textViewLock.TryLockAsync(cancellationToken))
+            using (var lockResult = await this.textViewLock.TryLockAsync(cancellationToken).ConfigureAwait(true))
             {
                 if (lockResult)
                 {

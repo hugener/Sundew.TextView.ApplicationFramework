@@ -16,7 +16,10 @@ namespace Sundew.TextView.ApplicationFramework.SampleApplication
     {
         private BusySpinner busySpinner;
 
-        public IEnumerable<object> InputTargets => null;
+        public IEnumerable<object> InputTargets
+        {
+            get { yield return this; }
+        }
 
         public Task OnShowingAsync(IInvalidater invalidater, ICharacterContext characterContext)
         {
@@ -24,7 +27,7 @@ namespace Sundew.TextView.ApplicationFramework.SampleApplication
             return Task.CompletedTask;
         }
 
-        public void Render(IRenderContext renderContext)
+        public void OnDraw(IRenderContext renderContext)
         {
             renderContext.CursorEnabled = false;
             renderContext.Home();

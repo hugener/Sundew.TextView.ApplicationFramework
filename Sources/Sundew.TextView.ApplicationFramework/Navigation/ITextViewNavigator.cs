@@ -15,7 +15,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
     /// <summary>
     /// Interface for implementing a text view navigator.
     /// </summary>
-    public interface ITextViewNavigator
+    public interface ITextViewNavigator : IDisposable
     {
         /// <summary>
         /// Gets the current view.
@@ -47,7 +47,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        Task<bool> ShowAsync(ITextView textView, Action<ITextView> onNavigatingAction);
+        Task<bool> ShowAsync(ITextView textView, Action<ITextView>? onNavigatingAction);
 
         /// <summary>
         /// Shows the modal asynchronous.
@@ -57,7 +57,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction);
+        Task<bool> ShowModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction);
 
         /// <summary>
         /// Shows the modal asynchronous.
@@ -84,7 +84,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, params object[] additionalInputTargets);
+        Task<bool> ShowModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction, params object[] additionalInputTargets);
 
         /// <summary>
         /// Shows the modal asynchronous.
@@ -95,7 +95,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, IEnumerable<object> additionalInputTargets);
+        Task<bool> ShowModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction, IEnumerable<object> additionalInputTargets);
 
         /// <summary>
         /// Navigates to asynchronous.
@@ -112,7 +112,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        Task<bool> NavigateToAsync(ITextView textView, Action<ITextView> onNavigatingAction);
+        Task<bool> NavigateToAsync(ITextView textView, Action<ITextView>? onNavigatingAction);
 
         /// <summary>
         /// Navigates to modal asynchronous.
@@ -129,7 +129,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction);
+        Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction);
 
         /// <summary>
         /// Navigates to modal asynchronous.
@@ -160,7 +160,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, params object[] additionalInputTargets);
+        Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction, params object[] additionalInputTargets);
 
         /// <summary>
         /// Navigates to modal asynchronous.
@@ -171,7 +171,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, IEnumerable<object> additionalInputTargets);
+        Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction, IEnumerable<object> additionalInputTargets);
 
         /// <summary>
         /// Navigates the back asynchronous.
@@ -184,6 +184,6 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// </summary>
         /// <param name="onNavigatingAction">The on navigating action.</param>
         /// <returns>An async task with a value indicating whether the navigation was successful.</returns>
-        Task<bool> NavigateBackAsync(Action<ITextView> onNavigatingAction);
+        Task<bool> NavigateBackAsync(Action<ITextView>? onNavigatingAction);
     }
 }

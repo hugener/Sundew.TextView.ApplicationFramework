@@ -21,14 +21,13 @@ namespace Sundew.TextView.ApplicationFramework
     /// <summary>
     /// Represents an application.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "The run method blocks until application close, when this happens cancellationTokenSource is disposed.")]
     public sealed class Application : IApplication
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly List<IIdleMonitor> idleMonitors = new List<IIdleMonitor>();
         private readonly DisposingList<IDisposable> disposer = new DisposingList<IDisposable>();
-        private ITextViewRendererFactory textViewRendererFactory;
-        private ITextViewRenderer textViewRenderer;
-        private InputManager inputManager;
+        private InputManager inputManager = default!;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Application"/> class.
@@ -41,12 +40,12 @@ namespace Sundew.TextView.ApplicationFramework
         /// <summary>
         /// Occurs when [exiting].
         /// </summary>
-        public event EventHandler<ExitRequestEventArgs> ExitRequest;
+        public event EventHandler<ExitRequestEventArgs>? ExitRequest;
 
         /// <summary>
         /// Occurs when [exit].
         /// </summary>
-        public event EventHandler<EventArgs> Exiting;
+        public event EventHandler<EventArgs>? Exiting;
 
         /// <summary>
         /// Gets the exit cancellation token.
@@ -62,7 +61,7 @@ namespace Sundew.TextView.ApplicationFramework
         /// <value>
         /// The idle controller reporter.
         /// </value>
-        public IIdleMonitorReporter IdleMonitorReporter { get; set; }
+        public IIdleMonitorReporter? IdleMonitorReporter { get; set; }
 
         /// <summary>
         /// Gets or sets the input manager reporter.
@@ -70,7 +69,7 @@ namespace Sundew.TextView.ApplicationFramework
         /// <value>
         /// The input manager reporter.
         /// </value>
-        public IInputManagerReporter InputManagerReporter { get; set; }
+        public IInputManagerReporter? InputManagerReporter { get; set; }
 
         /// <summary>
         /// Gets or sets the text view renderer reporter.
@@ -78,7 +77,11 @@ namespace Sundew.TextView.ApplicationFramework
         /// <value>
         /// The text view renderer reporter.
         /// </value>
-        public ITextViewRendererReporter TextViewRendererReporter { get; set; }
+        public ITextViewRendererReporter? TextViewRendererReporter { get; set; }
+
+        /// <summary>Gets or sets the time interval synchronizer reporter.</summary>
+        /// <value>The time interval synchronizer reporter.</value>
+        public ITimeIntervalSynchronizerReporter? TimeIntervalSynchronizerReporter { get; set; }
 
         /// <summary>
         /// Gets the input manager.
@@ -86,7 +89,14 @@ namespace Sundew.TextView.ApplicationFramework
         /// <value>
         /// The input manager.
         /// </value>
-        public IInputManager InputManager => this.EnsureInputManager();
+        public IInputManager InputManager
+        {
+            get
+            {
+                this.inputManager = this.EnsureInputManager();
+                return this.inputManager;
+            }
+        }
 
         /// <summary>
         /// Starts the rendering.
@@ -95,24 +105,41 @@ namespace Sundew.TextView.ApplicationFramework
         /// <returns>A <see cref="TextViewNavigator" />.</returns>
         public ITextViewNavigator StartRendering(ITextDisplayDevice textDisplayDevice)
         {
-            var timerFactory = new TimerFactory();
-            var textViewRendererFactory = this.disposer.Add(
-                new TextViewRendererFactory(textDisplayDevice, timerFactory, this.TextViewRendererReporter));
-            this.disposer.Add(timerFactory);
-            return this.StartRendering(textViewRendererFactory);
+            return this.StartRendering(textDisplayDevice, TimeSpan.Zero);
         }
 
         /// <summary>
         /// Starts the rendering.
         /// </summary>
+        /// <param name="textDisplayDevice">The text display device.</param>
+        /// <param name="refreshInterval">The refresh interval.</param>
+        /// <returns>A <see cref="TextViewNavigator" />.</returns>
+        public ITextViewNavigator StartRendering(ITextDisplayDevice textDisplayDevice, TimeSpan refreshInterval)
+        {
+            var timerFactory = new TimerFactory();
+            var textViewRendererFactory = this.disposer.Add(
+                new TextViewRendererFactory(textDisplayDevice, timerFactory, this.TextViewRendererReporter, this.TimeIntervalSynchronizerReporter));
+            this.disposer.Add(timerFactory);
+            return this.StartRendering(textViewRendererFactory, refreshInterval);
+        }
+
+        /// <summary>Starts the rendering.</summary>
         /// <param name="textViewRendererFactory">The text view renderer factory.</param>
         /// <returns>A <see cref="TextViewNavigator"/>.</returns>
         public ITextViewNavigator StartRendering(ITextViewRendererFactory textViewRendererFactory)
         {
-            this.textViewRendererFactory = textViewRendererFactory;
-            this.textViewRenderer = this.textViewRendererFactory.Create();
-            this.textViewRenderer.Start();
-            return new TextViewNavigator(this.textViewRenderer, this.EnsureInputManager());
+            return this.StartRendering(textViewRendererFactory, TimeSpan.Zero);
+        }
+
+        /// <summary>Starts the rendering.</summary>
+        /// <param name="textViewRendererFactory">The text view renderer factory.</param>
+        /// <param name="refreshInterval">The refresh interval.</param>
+        /// <returns>A <see cref="TextViewNavigator"/>.</returns>
+        public ITextViewNavigator StartRendering(ITextViewRendererFactory textViewRendererFactory, TimeSpan refreshInterval)
+        {
+            var textViewRenderer = textViewRendererFactory.Create(refreshInterval);
+            textViewRenderer.Start();
+            return this.disposer.Add(new TextViewNavigator(textViewRenderer, this.EnsureInputManager()));
         }
 
         /// <summary>
@@ -139,7 +166,7 @@ namespace Sundew.TextView.ApplicationFramework
         /// <param name="systemIdleTimeSpan">The system idle time span.</param>
         /// <returns>An <see cref="IdleMonitor" />.</returns>
         public IIdleMonitor CreateIdleMonitoring(
-            IActivityAggregator additionalInputAggregator,
+            IActivityAggregator? additionalInputAggregator,
             IActivityAggregator systemActivityAggregator,
             TimeSpan inputIdleTimeSpan,
             TimeSpan systemIdleTimeSpan)
@@ -166,6 +193,7 @@ namespace Sundew.TextView.ApplicationFramework
             finally
             {
                 Console.CancelKeyPress -= this.OnConsoleCancelKeyPress;
+                this.cancellationTokenSource.Dispose();
                 this.disposer.Dispose();
             }
         }
@@ -198,9 +226,9 @@ namespace Sundew.TextView.ApplicationFramework
             this.cancellationTokenSource.Cancel();
         }
 
-        private IInputManager EnsureInputManager()
+        private InputManager EnsureInputManager()
         {
-            return this.inputManager ?? (this.inputManager = new InputManager(this.InputManagerReporter));
+            return this.inputManager ?? new InputManager(this.InputManagerReporter);
         }
 
         private void OnConsoleCancelKeyPress(object sender, ConsoleCancelEventArgs e)

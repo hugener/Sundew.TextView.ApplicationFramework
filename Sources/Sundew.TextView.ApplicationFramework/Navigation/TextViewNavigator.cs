@@ -12,6 +12,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Sundew.Base.Threading;
     using Sundew.TextView.ApplicationFramework.Input;
     using Sundew.TextView.ApplicationFramework.TextViewRendering;
 
@@ -20,12 +21,13 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
     /// </summary>
     public sealed class TextViewNavigator : ITextViewNavigator
     {
-        private static readonly object[] EmptyInputTargets = new object[0];
-        private static readonly TextViewInfo EmptyTextViewInfo = new TextViewInfo(null, false);
+        private static readonly object[] EmptyInputTargets = Array.Empty<object>();
+        private readonly TextViewInfo initialTextViewInfo;
+        private readonly AsyncLock asyncLock = new AsyncLock();
         private readonly ConcurrentStack<TextViewInfo> screenStack = new ConcurrentStack<TextViewInfo>();
         private readonly ITextViewRenderer textViewRenderer;
         private readonly IInputManager inputManager;
-        private TextViewInfo showTextViewInfo = EmptyTextViewInfo;
+        private TextViewInfo showTextViewInfo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextViewNavigator" /> class.
@@ -36,7 +38,9 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         {
             this.textViewRenderer = textViewRenderer;
             this.inputManager = inputManager;
-            this.screenStack.Push(new TextViewInfo(new EmptyTextView(), false));
+            this.initialTextViewInfo = new TextViewInfo(this.textViewRenderer.CurrentTextView, false);
+            this.screenStack.Push(this.initialTextViewInfo);
+            this.showTextViewInfo = this.initialTextViewInfo;
         }
 
         /// <summary>
@@ -49,7 +53,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         {
             get
             {
-                if (this.showTextViewInfo.TextView != null)
+                if (this.showTextViewInfo.TextView != this.initialTextViewInfo.TextView)
                 {
                     return this.showTextViewInfo.TextView;
                 }
@@ -59,7 +63,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
                     return textViewInfo.TextView;
                 }
 
-                return null;
+                return this.initialTextViewInfo.TextView;
             }
         }
 
@@ -91,7 +95,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public Task<bool> ShowAsync(ITextView textView, Action<ITextView> onNavigatingAction)
+        public Task<bool> ShowAsync(ITextView textView, Action<ITextView>? onNavigatingAction)
         {
             return this.PrivateShowAsync(textView, onNavigatingAction, false, EmptyInputTargets);
         }
@@ -104,7 +108,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction)
+        public Task<bool> ShowModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction)
         {
             return this.PrivateShowAsync(textView, onNavigatingAction, true, EmptyInputTargets);
         }
@@ -140,7 +144,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, params object[] additionalInputTargets)
+        public Task<bool> ShowModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction, params object[] additionalInputTargets)
         {
             return this.PrivateShowAsync(textView, onNavigatingAction, true, additionalInputTargets);
         }
@@ -154,7 +158,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public Task<bool> ShowModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, IEnumerable<object> additionalInputTargets)
+        public Task<bool> ShowModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction, IEnumerable<object> additionalInputTargets)
         {
             return this.PrivateShowAsync(textView, onNavigatingAction, true, additionalInputTargets);
         }
@@ -177,7 +181,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public Task<bool> NavigateToAsync(ITextView textView, Action<ITextView> onNavigatingAction)
+        public Task<bool> NavigateToAsync(ITextView textView, Action<ITextView>? onNavigatingAction)
         {
             return this.PrivateNavigateToAsync(textView, onNavigatingAction, false, null);
         }
@@ -200,7 +204,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction)
+        public Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction)
         {
             return this.PrivateNavigateToAsync(textView, onNavigatingAction, true, EmptyInputTargets);
         }
@@ -240,7 +244,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, params object[] additionalInputTargets)
+        public Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction, params object[] additionalInputTargets)
         {
             return this.PrivateNavigateToAsync(textView, onNavigatingAction, true, additionalInputTargets);
         }
@@ -254,7 +258,7 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// <returns>
         /// An async task with a value indicating whether the navigation was successful.
         /// </returns>
-        public Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView> onNavigatingAction, IEnumerable<object> additionalInputTargets)
+        public Task<bool> NavigateToModalAsync(ITextView textView, Action<ITextView>? onNavigatingAction, IEnumerable<object> additionalInputTargets)
         {
             return this.PrivateNavigateToAsync(textView, onNavigatingAction, true, additionalInputTargets);
         }
@@ -273,33 +277,36 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
         /// </summary>
         /// <param name="onNavigatingAction">The on navigating action.</param>
         /// <returns>An async task with a value indicating whether the navigation was successful.</returns>
-        public async Task<bool> NavigateBackAsync(Action<ITextView> onNavigatingAction)
+        public async Task<bool> NavigateBackAsync(Action<ITextView>? onNavigatingAction)
         {
-            if (this.showTextViewInfo.TextView != null)
+            using (await this.asyncLock.LockAsync().ConfigureAwait(false))
             {
-                var oldTextViewInfo = this.showTextViewInfo;
-                this.showTextViewInfo = EmptyTextViewInfo;
-                if (this.screenStack.TryPeek(out var peekedTextViewInfo))
+                if (this.showTextViewInfo.TextView != this.initialTextViewInfo.TextView)
                 {
-                    return await NavigateBackAsync(peekedTextViewInfo, oldTextViewInfo);
+                    var oldTextViewInfo = this.showTextViewInfo;
+                    this.showTextViewInfo = this.initialTextViewInfo;
+                    if (this.screenStack.TryPeek(out var peekedTextViewInfo))
+                    {
+                        return await NavigateBackAsync(peekedTextViewInfo, oldTextViewInfo).ConfigureAwait(false);
+                    }
+
+                    return false;
+                }
+
+                if (this.screenStack.TryPop(out var oldCurrentTextViewInfo))
+                {
+                    if (this.screenStack.TryPeek(out var newCurrentTextViewInfo))
+                    {
+                        return await NavigateBackAsync(newCurrentTextViewInfo, oldCurrentTextViewInfo).ConfigureAwait(false);
+                    }
                 }
 
                 return false;
             }
 
-            if (this.screenStack.TryPop(out var oldCurrentTextViewInfo))
-            {
-                if (this.screenStack.TryPeek(out var newCurrentTextViewInfo))
-                {
-                    return await NavigateBackAsync(newCurrentTextViewInfo, oldCurrentTextViewInfo);
-                }
-            }
-
-            return false;
-
             async Task<bool> NavigateBackAsync(TextViewInfo newTextViewInfo, TextViewInfo oldTextViewInfo)
             {
-                var result = await this.textViewRenderer.TrySetViewAsync(newTextViewInfo.TextView, onNavigatingAction);
+                var result = await this.textViewRenderer.TrySetViewAsync(newTextViewInfo.TextView, onNavigatingAction).ConfigureAwait(false);
                 if (result && oldTextViewInfo.IsModal)
                 {
                     this.inputManager?.EndInputContext();
@@ -309,51 +316,63 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
             }
         }
 
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+        public void Dispose()
+        {
+            this.asyncLock.Dispose();
+        }
+
         private async Task<bool> PrivateShowAsync(
             ITextView textView,
-            Action<ITextView> onNavigatingAction,
+            Action<ITextView>? onNavigatingAction,
             bool isModal,
-            IEnumerable<object> additionalInputTargets)
+            IEnumerable<object>? additionalInputTargets)
         {
-            var result = await this.textViewRenderer.TrySetViewAsync(textView, onNavigatingAction);
-            if (result)
+            using (await this.asyncLock.LockAsync().ConfigureAwait(false))
             {
-                this.showTextViewInfo = new TextViewInfo(textView, isModal);
-                if (isModal)
+                var result = await this.textViewRenderer.TrySetViewAsync(textView, onNavigatingAction).ConfigureAwait(false);
+                if (result)
                 {
-                    this.inputManager?.StartInputContext(textView.InputTargets.Concat(additionalInputTargets), true);
+                    this.showTextViewInfo = new TextViewInfo(textView, isModal);
+                    if (isModal)
+                    {
+                        this.inputManager?.StartInputContext(textView.InputTargets.Concat(additionalInputTargets), true);
+                    }
                 }
-            }
 
-            return result;
+                return result;
+            }
         }
 
         private async Task<bool> PrivateNavigateToAsync(
             ITextView textView,
-            Action<ITextView> onNavigatingAction,
+            Action<ITextView>? onNavigatingAction,
             bool isModal,
-            IEnumerable<object> additionalInputTargets)
+            IEnumerable<object>? additionalInputTargets)
         {
-            var result = await this.textViewRenderer.TrySetViewAsync(textView, oldTextView =>
+            using (await this.asyncLock.LockAsync().ConfigureAwait(false))
             {
-                this.showTextViewInfo = EmptyTextViewInfo;
-                onNavigatingAction?.Invoke(oldTextView);
-            });
-            if (result)
-            {
-                this.screenStack.Push(new TextViewInfo(textView, isModal));
-                if (isModal)
+                var result = await this.textViewRenderer.TrySetViewAsync(textView, oldTextView =>
                 {
-                    if (textView.InputTargets == null || !textView.InputTargets.Any())
+                    this.showTextViewInfo = this.initialTextViewInfo;
+                    onNavigatingAction?.Invoke(oldTextView);
+                }).ConfigureAwait(false);
+                if (result)
+                {
+                    this.screenStack.Push(new TextViewInfo(textView, isModal));
+                    if (isModal)
                     {
-                        throw new NavigationException(textView);
+                        if (textView.InputTargets == null || !textView.InputTargets.Any())
+                        {
+                            throw new NavigationException(textView);
+                        }
+
+                        this.inputManager?.StartInputContext(textView.InputTargets.Concat(additionalInputTargets), false);
                     }
-
-                    this.inputManager?.StartInputContext(textView.InputTargets.Concat(additionalInputTargets), false);
                 }
-            }
 
-            return result;
+                return result;
+            }
         }
 
         private readonly struct TextViewInfo

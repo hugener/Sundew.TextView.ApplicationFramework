@@ -40,6 +40,6 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// </returns>
         Task<Result<ITextView, SetTextViewError>> TrySetViewAsync(
             ITextView newTextView,
-            Action<ITextView> onNavigatingAction);
+            Action<ITextView>? onNavigatingAction);
     }
 }

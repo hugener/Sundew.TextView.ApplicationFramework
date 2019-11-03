@@ -13,11 +13,15 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     /// <summary>
     /// Interface for implementing a rendering context.
     /// </summary>
-    public interface IRenderingContext : IRenderContext, IEnumerable<Action>
+    public interface IRenderingContext : IRenderContext
     {
         /// <summary>Gets the instruction count.</summary>
         /// <value>The instruction count.</value>
         int InstructionCount { get; }
+
+        /// <summary>Gets the instructions.</summary>
+        /// <value>The instructions.</value>
+        IEnumerable<Action> Instructions { get; }
 
         /// <summary>
         /// Resets this instance.

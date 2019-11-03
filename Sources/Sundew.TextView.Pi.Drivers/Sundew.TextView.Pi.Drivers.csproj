@@ -3,9 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.0-pre014</Version>
+    <Version>0.0.0-pre023</Version>
     <Company>Hukano</Company>
     <Authors>Kim Hugener-Ohlsen</Authors>
+    <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -29,13 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pi.IO.Devices.SundewFork" Version="0.0.3-pre018" />
-    <PackageReference Include="Pi.IO.GeneralPurpose.SundewFork" Version="0.0.3-pre018" />
-    <PackageReference Include="Pi.IO.InterIntegratedCircuit.SundewFork" Version="0.0.3-pre018" />
-    <PackageReference Include="Pi.IO.Interop.SundewFork" Version="0.0.3-pre018" />
-    <PackageReference Include="Pi.IO.SerialPeripheralInterface.SundewFork" Version="0.0.3-pre018" />
-    <PackageReference Include="Pi.IO.SundewFork" Version="0.0.3-pre018" />
-    <PackageReference Include="Pi.System.SundewFork" Version="0.0.3-pre018" />
+    <PackageReference Include="Pi.IO.Devices.SundewFork" Version="1.0.0-pre002" />
+    <PackageReference Include="Pi.SundewFork" Version="1.0.0-pre002" />
   </ItemGroup>
 
   <ItemGroup>
