@@ -44,7 +44,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// <returns>
         ///   <c>true</c>, if custom characters are supported, otherwise <c>false</c>.
         /// </returns>
-        public Result<ICharacterContext> TryCreateCustomCharacterBuilder()
+        public Result.IfSuccess<ICharacterContext> TryCreateCustomCharacterBuilder()
         {
             return this.textDisplayDevice.TryCreateCharacterContext();
         }

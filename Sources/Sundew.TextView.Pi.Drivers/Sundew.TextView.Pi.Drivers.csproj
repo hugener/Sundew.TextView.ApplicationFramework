@@ -3,11 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.0-pre023</Version>
+    <Version>0.0.1</Version>
     <Company>Hukano</Company>
     <Authors>Kim Hugener-Ohlsen</Authors>
     <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Release-Stable</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,6 +23,13 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Stable|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Sundew.Pi.IO.Drivers.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <SbpSourceName>local-stable</SbpSourceName>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="stylecop.json" />
   </ItemGroup>
@@ -31,8 +39,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pi.IO.Devices.SundewFork" Version="1.0.0-pre002" />
-    <PackageReference Include="Pi.SundewFork" Version="1.0.0-pre002" />
+    <PackageReference Include="Pi.IO.Devices.SundewFork" Version="0.1.0" />
+    <PackageReference Include="Pi.SundewFork" Version="0.1.0" />
+    <PackageReference Include="Sundew.Base" Version="4.0.0" />
+    <PackageReference Include="Sundew.Build.Publish" Version="1.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

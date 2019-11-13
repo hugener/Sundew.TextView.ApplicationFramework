@@ -26,6 +26,6 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// <returns>
         ///   <c>true</c>, if custom characters are supported, otherwise <c>false</c>.
         /// </returns>
-        Result<ICharacterContext> TryCreateCustomCharacterBuilder();
+        Result.IfSuccess<ICharacterContext> TryCreateCustomCharacterBuilder();
     }
 }

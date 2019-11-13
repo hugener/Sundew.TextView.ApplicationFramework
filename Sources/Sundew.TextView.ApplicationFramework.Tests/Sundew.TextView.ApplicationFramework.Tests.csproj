@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>8</LangVersion>
     <IsPackable>false</IsPackable>
+    <Configurations>Debug;Release;Release-Stable</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

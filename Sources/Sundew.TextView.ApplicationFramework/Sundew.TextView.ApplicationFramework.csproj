@@ -3,12 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8</LangVersion>
-    <Version>0.0.0-pre037</Version>
+    <Version>0.0.1</Version>
     <Company>Hukano</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Kim Hugener-Ohlsen</Authors>
     <Description>Application framework for implementing text display based applications.</Description>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Release-Stable</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,6 +24,14 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn>1701;1702;CA1062;CA1032;CA2000;CA1303;CA1716</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Stable|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Sundew.Pi.ApplicationFramework.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn>1701;1702;CA1062;CA1032;CA2000;CA1303;CA1716</NoWarn>
+    <SbpSourceName>local-stable</SbpSourceName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,8 +51,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Sundew.Base" Version="4.0.1-pre-u20191103-214356" />
-    <PackageReference Include="Sundew.Build.Publish" Version="0.0.2-pre-u20191103-211938">
+    <PackageReference Include="Sundew.Base" Version="4.0.0" />
+    <PackageReference Include="Sundew.Build.Publish" Version="1.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

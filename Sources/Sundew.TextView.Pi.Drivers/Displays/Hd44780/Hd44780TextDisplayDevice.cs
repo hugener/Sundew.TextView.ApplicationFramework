@@ -77,7 +77,7 @@ namespace Sundew.TextView.Pi.Drivers.Displays.Hd44780
         /// Tries the create character context.
         /// </summary>
         /// <returns>The result.</returns>
-        public Result<ICharacterContext> TryCreateCharacterContext()
+        public Result.IfSuccess<ICharacterContext> TryCreateCharacterContext()
         {
             return Result.Success<ICharacterContext>(new CharacterContext(this.hd44780LcdDevice, new Size(this.settings.PatternWidth, this.settings.PatternHeight)));
         }

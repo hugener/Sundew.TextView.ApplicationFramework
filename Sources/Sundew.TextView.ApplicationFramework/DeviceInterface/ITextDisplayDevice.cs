@@ -51,7 +51,7 @@ namespace Sundew.TextView.ApplicationFramework.DeviceInterface
         /// Tries the create character context.
         /// </summary>
         /// <returns>The result with an <see cref="ICharacterContext"/> if successfull.</returns>
-        Result<ICharacterContext> TryCreateCharacterContext();
+        Result.IfSuccess<ICharacterContext> TryCreateCharacterContext();
 
         /// <summary>
         /// Writes the line.
