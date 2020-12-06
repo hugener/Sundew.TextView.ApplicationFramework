@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>8</LangVersion>
+    <IsPackable>false</IsPackable>
+    <Configurations>Debug;Release;Release-Stable</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="JustMock" Version="2020.3.1124.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TextViewRendering\Animation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sundew.TextView.ApplicationFramework.SampleApplication\Sundew.TextView.ApplicationFramework.SampleApplication.csproj" />
+    <ProjectReference Include="..\Sundew.TextView.ApplicationFramework\Sundew.TextView.ApplicationFramework.csproj" />
+  </ItemGroup>
+
+</Project>

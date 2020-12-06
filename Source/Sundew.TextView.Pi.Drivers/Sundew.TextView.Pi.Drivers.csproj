@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>Hukano</Company>
+    <Authors>Kim Hugener-Ohlsen</Authors>
+    <LangVersion>9</LangVersion>
+    <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Release-Stable</Configurations>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Kim Hugener-Ohlsen</Copyright>
+    <PackageProjectUrl>https://github.com/hugener/Sundew.TextView.ApplicationFramework</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hugener/Sundew.TextView.ApplicationFramework</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Stable|AnyCPU'">
+    <SbpSourceName>local-stable</SbpSourceName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pi.IO.Devices.SundewFork" Version="0.4.0" />
+    <PackageReference Include="Sundew.Build.Publish" Version="2.2.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sundew.TextView.ApplicationFramework\Sundew.TextView.ApplicationFramework.csproj" />
+  </ItemGroup>
+
+</Project>
