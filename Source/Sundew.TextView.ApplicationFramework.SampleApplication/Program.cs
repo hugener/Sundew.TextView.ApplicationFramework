@@ -18,7 +18,7 @@
             application.Run();
         }
 
-        private static void Application_RenderException(object sender, TextViewRendering.RenderExceptionEventArgs e)
+        private static void Application_RenderException(object? sender, TextViewRendering.RenderExceptionEventArgs e)
         {
             e.Continue = true;
         }

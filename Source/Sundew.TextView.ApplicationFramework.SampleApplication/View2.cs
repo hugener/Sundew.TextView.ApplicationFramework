@@ -11,7 +11,7 @@ namespace Sundew.TextView.ApplicationFramework.SampleApplication
             get { yield return this; }
         }
 
-        public Task OnShowingAsync(IInvalidater invalidater, ICharacterContext characterContext)
+        public Task OnShowingAsync(IInvalidater invalidater, ICharacterContext? characterContext)
         {
             return Task.CompletedTask;
         }

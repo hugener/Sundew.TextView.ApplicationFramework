@@ -2,12 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>9</LangVersion>
     <Company>Hukano</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Kim Hugener-Ohlsen</Authors>
     <Description>Application framework for implementing text display based applications.</Description>
-    <Nullable>enable</Nullable>
     <Configurations>Debug;Release;Release-Stable</Configurations>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
@@ -21,7 +19,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Stable|AnyCPU'">
-    <SbpSourceName>local-stable</SbpSourceName>
+    <SppSourceName>local-stable</SppSourceName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -42,7 +40,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Sundew.Base" Version="6.0.0" />
-    <PackageReference Include="Sundew.Build.Publish" Version="2.2.8">
+    <PackageReference Include="Sundew.Packaging.Publish" Version="3.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -14,14 +14,14 @@ namespace Sundew.TextView.ApplicationFramework.SampleApplication
 
     public class MainTextView : ITextView
     {
-        private BusySpinner busySpinner;
+        private BusySpinner? busySpinner;
 
         public IEnumerable<object> InputTargets
         {
             get { yield return this; }
         }
 
-        public Task OnShowingAsync(IInvalidater invalidater, ICharacterContext characterContext)
+        public Task OnShowingAsync(IInvalidater invalidater, ICharacterContext? characterContext)
         {
             this.busySpinner = new BusySpinner(invalidater, TimeSpan.FromMilliseconds(15));
             return Task.CompletedTask;
@@ -31,7 +31,7 @@ namespace Sundew.TextView.ApplicationFramework.SampleApplication
         {
             renderContext.CursorEnabled = false;
             renderContext.SetPosition(0,0);
-            renderContext.WriteLine($"Hello World {this.busySpinner.GetFrame()}");
+            renderContext.WriteLine($"Hello World {this.busySpinner!.GetFrame()}");
             renderContext.CursorEnabled = true;
         }
 
