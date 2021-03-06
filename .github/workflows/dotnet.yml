@@ -31,19 +31,19 @@ jobs:
       run: >
         dotnet build ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }}
         -p:"SppSourceName=${{ github.ref }}"
-        -p:"SppProductionSource=refs/heads/(?:master|main).* => ${{ source }}"
-        -p:"SppIntegrationSource=refs/heads/release/.+ => ${{ source }}"
-        -p:"SppDevelopmentSource=refs/heads/(?:develop.*|feature/.+|bugfix/.+) => ${{ secrets.SppDevelopmentApiKey }}@${{ dev-source }} {${{ dev-source-latest-version }}}"
+        -p:"SppProductionSource=refs/heads/(?:master|main).* => ${{ env.source }}"
+        -p:"SppIntegrationSource=refs/heads/release/.+ => ${{ env.source }}"
+        -p:"SppDevelopmentSource=refs/heads/(?:develop.*|feature/.+|bugfix/.+) => ${{ secrets.SppDevelopmentApiKey }}@${{ env.dev-source }} {${{ env.dev-source-latest-version }}}"
         -p:"SppAllowLocalSource=false"
         -p:"SppEnablePublish=false"
-        '-p:"SppPublishLogFormats=##vso[task.setvariable variable=pushSource;]{4}|##vso[task.setvariable variable=feedSource;]{6}|##vso[task.setvariable variable=apiKey;]{5}|##vso[task.setvariable variable=stage;]{3}"'
+        '-p:"SppPublishLogFormats=pushSource={4} >> $GITHUB_ENV|feedSource={6} >> $GITHUB_ENV|apiKey={5} >> $GITHUB_ENV|stage={3} >> $GITHUB_ENV"'
         '-p:"SppAppendPublishFileLogFormats={0},{1}  > logs/packages.pgkver"'
         -p:"SppApiKey=${{ secrets.SppApiKey }}"
     - name: Test
-      run: dotnet test ${{ solutionPath }} --verbosity normal --configuration ${{ buildConfiguration }} --no-build
+      run: dotnet test ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }} --no-build
     - name: Publish
       if: ${{ env.pushSource != 'null' }}
-      run: dotnet nuget push '**/*.nupkg' -s '$(pushSource)' -k '$(apiKey)'
+      run: dotnet nuget push '**/*.nupkg' -s '${{ env.pushSource }}' -k '${{ env.apiKey }}'
     - name: 'Tag stable version'
       if: ${{ env.stage == '' }}
       run: |
