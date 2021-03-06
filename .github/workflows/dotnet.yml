@@ -50,7 +50,7 @@ jobs:
         dotnet tool update CommandLineBatcher -g
         git config user.email "sundew-dev@outlook.com"
         git config user.name "sundew-build"
-        cb -c "git|tag -a {1}-{0} -m "{1}-{0}"" "git|push ${{ repository }} {1}-{0}" -s ',' -bf ./Source/logs/packages.pgkver
+        cb -c "git|tag -a {1}-{0} -m "{1}-{0}"" "git|push ${{ env.repository }} {1}-{0}" -s ',' -bf ./Source/logs/packages.pgkver
     - name: 'Wait for publish'
       if: ${{ env.stage == '' }}
       run: |
