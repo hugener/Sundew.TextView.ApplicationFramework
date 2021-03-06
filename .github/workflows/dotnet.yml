@@ -10,16 +10,53 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    env:
+      solutionPath: ./Source/Sundew.TextView.ApplicationFramework.sln
+      buildConfiguration: Release
+      repository: 'https://sundew-dev:${{ secrets.SundewDevToken }}@github.com/hugener/Sundew.TextView.ApplicationFramework.git'
+      source: 'https://api.nuget.org/v3/index.json'
+      dev-source: 'https://www.myget.org/F/sundew-dev/api/v2/package'
+      dev-source-latest-version: 'https://www.myget.org/F/sundew-dev/api/v3/index.json'
+      pushSource: 'null'
+      feedSource: 'null'
+      apiKey: 'null'
+      stage: 'null'
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: >
+        dotnet build $(solutionPath) --verbosity normal --configuration ${{ buildConfiguration }}
+        -p:"SppSourceName=${{ github.ref }}"
+        -p:"SppProductionSource=refs/heads/(?:master|main).* => ${{ source }}"
+        -p:"SppIntegrationSource=refs/heads/release/.+ => ${{ source }}"
+        -p:"SppDevelopmentSource=refs/heads/(?:develop.*|feature/.+|bugfix/.+) => ${{ secrets.SppDevelopmentApiKey }}@${{ dev-source }} {${{ dev-source-latest-version }}}"
+        -p:"SppAllowLocalSource=false"
+        -p:"SppEnablePublish=false"
+        '-p:"SppPublishLogFormats=##vso[task.setvariable variable=pushSource;]{4}|##vso[task.setvariable variable=feedSource;]{6}|##vso[task.setvariable variable=apiKey;]{5}|##vso[task.setvariable variable=stage;]{3}"'
+        '-p:"SppAppendPublishFileLogFormats={0},{1}  > logs/packages.pgkver"'
+        -p:"SppApiKey=${{ secrets.SppApiKey }}"
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ${{ solutionPath }} --verbosity normal --configuration ${{ buildConfiguration }} --no-build
+    - name: Publish
+      if: ${{ env.pushSource != 'null' }}
+      run: dotnet nuget push '**/*.nupkg' -s '$(pushSource)' -k '$(apiKey)'
+    - name: 'Tag stable version'
+      if: ${{ env.stage == '' }}
+      run: |
+        dotnet tool update CommandLineBatcher -g
+        git config user.email "sundew-dev@outlook.com"
+        git config user.name "sundew-build"
+        cb -c "git|tag -a {1}-{0} -m "{1}-{0}"" "git|push ${{ repository }} {1}-{0}" -s ',' -bf ./Source/logs/packages.pgkver
+    - name: 'Wait for publish'
+      if: ${{ env.stage == '' }}
+      run: |
+        dotnet tool update Sundew.Packaging.Tool -g
+        cb -c "spt|await -s ${{ env.feedSource }} {0}.{1}" -s ',' -bf ./Source/logs/packages.pgkver
+    
+
+
+
