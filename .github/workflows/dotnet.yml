@@ -31,9 +31,9 @@ jobs:
       run: >
         dotnet build ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }}
         -p:"SppSourceName=${{ github.ref }}"
-        -p:"SppProductionSource=refs/heads/(?:master|main).* => ${{ env.source }}"
-        -p:"SppIntegrationSource=refs/heads/release/.+ => ${{ env.source }}"
-        -p:"SppDevelopmentSource=refs/heads/(?:develop.*|feature/.+|bugfix/.+) => ${{ secrets.SppDevelopmentApiKey }}@${{ env.dev-source }} {${{ env.dev-source-latest-version }}}"
+        '-p:"SppProductionSource=refs/heads/(?:master|main).* => ${{ env.source }}"'
+        '-p:"SppIntegrationSource=refs/heads/release/.+ => ${{ env.source }}"'
+        '-p:"SppDevelopmentSource=refs/heads/(?:develop.*|feature/.+|bugfix/.+) => ${{ secrets.SppDevelopmentApiKey }}@${{ env.dev-source }} {${{ env.dev-source-latest-version }}}"'
         -p:"SppAllowLocalSource=false"
         -p:"SppEnablePublish=false"
         '-p:"SppPublishLogFormats=pushSource={4} >> $GITHUB_ENV|feedSource={6} >> $GITHUB_ENV|apiKey={5} >> $GITHUB_ENV|stage={3} >> $GITHUB_ENV"'
