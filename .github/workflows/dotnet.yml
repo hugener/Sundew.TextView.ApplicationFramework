@@ -22,7 +22,7 @@ jobs:
       apiKey: 'null'
       stage: 'null'
       SPP_API_KEY: ${{ secrets.SPPAPIKEY }}H
-      SppDevelopmentApiKey: ${{ secrets.SPPDEVELOPMENTKEY }}H
+      SppDevelopmentApiKey: ${{ secrets.SPPDEVELOPMENTAPIKEY }}H
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
