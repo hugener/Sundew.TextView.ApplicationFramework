@@ -30,8 +30,8 @@ jobs:
     - name: Build
       id: build
       env:
-        SppApiKey: ${{ secrets.SppApiKey }}
-        SppDevelopmentApiKey: ${{ secrets.SppDevelopmentApiKey }}
+        SppApiKey: ${{ secrets.SppApiKey }}H
+        SppDevelopmentApiKey: ${{ secrets.SppDevelopmentApiKey }}H
       run: >
         dotnet build ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }}
         -p:"SppSourceName=${{ github.ref }}"
@@ -42,7 +42,7 @@ jobs:
         -p:"SppEnablePublish=false"
         '-p:"SppPublishLogFormats=::set-output name=pushSource::{4}|::set-output name=feedSource::{6}|::set-output name=apiKey::{5}|::set-output name=stage::{3}"'
         '-p:"SppAppendPublishFileLogFormats={0},{1}  > logs/packages.pgkver"'
-        -p:"SppApiKey=${{ env.SppApiKey }}"
+        -p:"SppApiKey=$SppApiKey"
     - name: Test
       run: dotnet test ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }} --no-build
     - name: Publish
