@@ -21,17 +21,20 @@ jobs:
       feedSource: 'null'
       apiKey: 'null'
       stage: 'null'
+      SPP_API_KEY: ${{ secrets.SppApiKey }}H
+      SppDevelopmentApiKey: ${{ secrets.SppDevelopmentApiKey }}H
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+    - name: STest
+      run: echo "$SPP_API_KEY""
+    - name: STest2
+      run: echo "${{ env.SppDevelopmentApiKey }}"
     - name: Build
       id: build
-      env:
-        SPP_API_KEY: ${{ secrets.SppApiKey }}H
-        SppDevelopmentApiKey: ${{ secrets.SppDevelopmentApiKey }}H
       run: >
         dotnet build ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }}
         -p:"SppSourceName=${{ github.ref }}"
