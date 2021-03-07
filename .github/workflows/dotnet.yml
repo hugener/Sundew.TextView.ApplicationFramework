@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: STest
-      run: echo "$SPP_API_KEY""
+      run: echo "$SPP_API_KEY"
     - name: STest2
       run: echo "${{ env.SppDevelopmentApiKey }}"
     - name: Build
