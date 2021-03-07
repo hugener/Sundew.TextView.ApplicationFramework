@@ -21,7 +21,7 @@ jobs:
       feedSource: 'null'
       apiKey: 'null'
       stage: 'null'
-      SPP_API_KEY: ${{ secrets.SPPAPIKEY }}H
+      SPP_API_KEY: ${{ secrets.SPP_API_KEY }}H
       SppDevelopmentApiKey: ${{ secrets.SPPDEVELOPMENTAPIKEY }}H
     steps:
     - uses: actions/checkout@v2
