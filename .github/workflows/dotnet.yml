@@ -18,7 +18,7 @@ jobs:
       apiKey: 'null'
       stage: 'null'
       package-versions: 'logs/packages.pkgver'
-      source-package-versions: './Source/${{ package-versions }}'
+      source-package-versions: './Source/${{ env.package-versions }}'
     steps:
     - name: 'Await other builds'
       uses: softprops/turnstyle@v1
@@ -36,8 +36,8 @@ jobs:
         dotnet build ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }}
         -p:"SppSourceName=${{ github.ref }}"
         '-p:"SppProductionSource=refs/heads/(?:master|main).* => ${{ env.source }}"'
-        '-p:"SppIntegrationSource=refs/heads/release/.+ ${1}-{0} => ${{ env.source }}"'
-        '-p:"SppDevelopmentSource=refs/heads/(?:develop.*|feature/.+|bugfix/.+) ${1}-{0} => ${{ secrets.SPP_DEVELOPMENT_API_KEY }}@${{ env.dev-source }} {${{ env.dev-source-latest-version }}}"'
+        '-p:"SppIntegrationSource=refs/heads/release/.+ $u{1}-{0} => ${{ env.source }}"'
+        '-p:"SppDevelopmentSource=refs/heads/(?:develop.*|feature/.+|bugfix/.+) $u{1}-{0} => ${{ secrets.SPP_DEVELOPMENT_API_KEY }}@${{ env.dev-source }} {${{ env.dev-source-latest-version }}}"'
         -p:"SppAllowLocalSource=false"
         -p:"SppEnablePublish=false"
         '-p:"SppPublishLogFormats=::set-output name=pushSource::{4}|::set-output name=feedSource::{6}|::set-output name=apiKey::{5}|::set-output name=stage::{3}"'
