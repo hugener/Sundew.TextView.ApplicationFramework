@@ -12,7 +12,7 @@ jobs:
       repository: 'https://sundew-dev:${{ secrets.SUNDEW_DEV_TOKEN }}@github.com/hugener/Sundew.TextView.ApplicationFramework.git'
       source: 'https://api.nuget.org/v3/index.json'
       dev-source: 'https://www.myget.org/F/sundew-dev/api/v2/package'
-      dev-source-latest-version: 'https://www.myget.org/F/sundew-dev/api/v3/index.json|https://api.nuget.org/v3/index.json'
+      dev-source-latest-version: 'https://www.myget.org/F/sundew-dev/api/v3/index.json'
       pushSource: 'null'
       feedSource: 'null'
       apiKey: 'null'
@@ -43,6 +43,7 @@ jobs:
         '-p:"SppPublishLogFormats=::set-output name=pushSource::{4}|::set-output name=feedSource::{6}|::set-output name=apiKey::{5}|::set-output name=stage::{3}"'
         '-p:"SppAppendPublishFileLogFormats={0},{1}  > ${{ env.package-versions }}"'
         -p:"SppApiKey=${{ secrets.SPP_API_KEY }}"
+        '-p:"SppLatestVersionSources=${{ env.source }}"'
     - name: Test
       run: dotnet test ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }} --no-build
     - name: Publish
