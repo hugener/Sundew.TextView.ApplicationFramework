@@ -18,7 +18,7 @@ jobs:
       apiKey: 'null'
       stage: 'null'
       package-versions: 'logs/packages.pkgver'
-      source-package-versions: './Source/${{ env.package-versions }}'
+      source-package-versions: './Source/logs/packages.pkgver'
     steps:
     - name: 'Await other builds'
       uses: softprops/turnstyle@v1
