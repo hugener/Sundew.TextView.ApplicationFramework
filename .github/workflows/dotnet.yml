@@ -43,7 +43,6 @@ jobs:
         '-p:"SppPublishLogFormats=::set-output name=pushSource::{4}|::set-output name=feedSource::{6}|::set-output name=apiKey::{5}|::set-output name=stage::{3}"'
         '-p:"SppAppendPublishFileLogFormats={0},{1}  > ${{ env.package-versions }}"'
         -p:"SppApiKey=${{ secrets.SPP_API_KEY }}"
-        '-p:"SppGetLatestVersionSources=${{ env.source }}"'
     - name: Test
       run: dotnet test ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }} --no-build
     - name: Publish
