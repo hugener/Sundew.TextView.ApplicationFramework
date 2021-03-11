@@ -33,7 +33,7 @@ jobs:
     - name: Build
       id: build
       run: >
-        dotnet build ${{ env.solutionPath }} --verbosity normal --configuration ${{ env.buildConfiguration }}
+        dotnet build ${{ env.solutionPath }} --verbosity detailed --configuration ${{ env.buildConfiguration }}
         -p:"SppSourceName=${{ github.ref }}"
         '-p:"SppProductionSource=refs/heads/(?:master|main).* => ${{ env.source }}"'
         '-p:"SppIntegrationSource=refs/heads/release/.+ $u{1}-{0} => ${{ env.source }}"'
