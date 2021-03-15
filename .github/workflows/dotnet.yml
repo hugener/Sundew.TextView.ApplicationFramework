@@ -36,7 +36,7 @@ jobs:
         '-p:"SppDevelopmentSource=refs/heads/(?:develop.*|feature/.+|bugfix/.+) => ${{ secrets.SPP_DEVELOPMENT_API_KEY }}@${{ env.dev-source }} {${{ env.dev-source-latest-version }}}|${{ secrets.SPP_DEVELOPMENT_API_KEY }}@${{ env.dev-symbols-source }}"'
         -p:"SppAllowLocalSource=false"
         -p:"SppEnablePublish=false"
-        '-p:"SppPublishLogFormats=::set-output name=pushSource::{4}|::set-output name=feedSource::{6}|::set-output name=apiKey::{5}|::set-output name=stage::{3}|::set-output name=symbolPushSource::{8}|::set-output name=symbolApiKey::{9}"'
+        '-p:"SppPublishLogFormats=::set-output name=stage::{3}|::set-output name=pushSource::{4}|::set-output name=feedSource::{6}|::set-output name=apiKey::{5}|::set-output name=symbolPushSource::{8}|::set-output name=symbolApiKey::{9}"'
         '-p:"SppAppendPublishFileLogFormats={0},{1}  > ${{ env.package-versions }}"'
         -p:"SppApiKey=${{ secrets.SPP_API_KEY }}"
         -p:"SppSymbolApiKey=${{ secrets.SPP_API_KEY }}"
