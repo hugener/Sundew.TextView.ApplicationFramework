@@ -60,3 +60,4 @@ jobs:
       run: |
         dotnet tool update Sundew.Packaging.Tool -g
         cb -c "spt|await -s ${{ steps.build.outputs.feedSource }} {0}.{1}" -s ',' -bf ${{ env.source-package-versions }}
+
