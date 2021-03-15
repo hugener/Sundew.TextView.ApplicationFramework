@@ -34,7 +34,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Pi.IO.Devices.SundewFork" Version="0.5.0" />
-    <PackageReference Include="Sundew.Packaging.Publish" Version="5.0.0-u20210312-205821-pre">
+    <PackageReference Include="Sundew.Packaging.Publish" Version="5.1.0-u20210315-232406-pre">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
