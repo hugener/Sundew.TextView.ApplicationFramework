@@ -10,12 +10,12 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Internal
     using System;
     using System.Collections.Generic;
     using System.Threading;
-    using Sundew.Base.Threading;
+    using Sundew.Base.Timers;
 
     internal class ViewTimer : IViewTimer
     {
         private readonly ITimer timer;
-        private readonly LinkedList<EventHandler> tick = new LinkedList<EventHandler>();
+        private readonly LinkedList<EventHandler> tick = new();
         private bool isListening;
 
         public ViewTimer(ITimer timer)

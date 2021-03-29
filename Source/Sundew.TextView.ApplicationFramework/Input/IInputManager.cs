@@ -60,7 +60,6 @@ namespace Sundew.TextView.ApplicationFramework.Input
         /// <param name="inputEvent">The input event.</param>
         /// <param name="sender">The sender.</param>
         /// <param name="eventArgs">The event args instance containing the event data.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1030:Use events where appropriate", Justification = "InputEvents have two modes, which cannot be implemented with .NET events.")]
         void Raise<TEventArgs>(InputEvent<TEventArgs> inputEvent, object sender, TEventArgs eventArgs);
     }
 }

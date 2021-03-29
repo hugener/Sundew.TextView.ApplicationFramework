@@ -19,7 +19,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     public sealed class RenderingContext : IRenderingContext
     {
         private readonly ITextDisplayDevice textDisplayDevice;
-        private readonly LinkedList<Action> renderInstructions = new LinkedList<Action>();
+        private readonly LinkedList<Action> renderInstructions = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderingContext" /> class.

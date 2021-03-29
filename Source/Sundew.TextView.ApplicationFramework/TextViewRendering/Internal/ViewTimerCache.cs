@@ -9,12 +9,12 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Internal
 {
     using System;
     using System.Collections.Generic;
-    using Sundew.Base.Threading;
+    using Sundew.Base.Timers;
 
     internal class ViewTimerCache : IDisposable
     {
         private readonly ITimerFactory timerFactory;
-        private readonly List<ViewTimer> timers = new List<ViewTimer>();
+        private readonly List<ViewTimer> timers = new();
         private int usedTimers;
 
         public ViewTimerCache(ITimerFactory timerFactory)

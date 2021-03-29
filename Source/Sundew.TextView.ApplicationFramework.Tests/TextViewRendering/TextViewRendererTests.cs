@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Sundew.Base.Computation;
-using Sundew.Base.Threading;
-using Sundew.TextView.ApplicationFramework.DeviceInterface;
-using Sundew.TextView.ApplicationFramework.SampleApplication;
-using Sundew.TextView.ApplicationFramework.TextViewRendering;
-using Xunit;
-using Xunit.Abstractions;
-
-namespace Sundew.TextView.ApplicationFramework.Tests.TextViewRendering
+﻿namespace Sundew.TextView.ApplicationFramework.Tests.TextViewRendering
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using FluentAssertions;
+    using Sundew.Base.Primitives.Computation;
+    using Sundew.Base.Timers;
+    using Sundew.TextView.ApplicationFramework.DeviceInterface;
+    using Sundew.TextView.ApplicationFramework.SampleApplication;
+    using Sundew.TextView.ApplicationFramework.TextViewRendering;
+    using Xunit;
+    using Xunit.Abstractions;
+
     public class TextViewRendererTests
     {
         private readonly ITestOutputHelper testOutputHelper;
@@ -49,9 +49,9 @@ namespace Sundew.TextView.ApplicationFramework.Tests.TextViewRendering
 
             public bool CursorBlinking { get; set; }
 
-            public Size Size { get; } = new Size(80, 40);
+            public Size Size { get; } = new(80, 40);
 
-            public Point CursorPosition { get; } = new Point(0, 0);
+            public Point CursorPosition { get; } = new(0, 0);
 
             public Result.IfSuccess<ICharacterContext> TryCreateCharacterContext()
             {
@@ -89,7 +89,7 @@ namespace Sundew.TextView.ApplicationFramework.Tests.TextViewRendering
 
         private class Reporter : ITextViewRendererReporter
         {
-            public List<string> Calls { get; } = new List<string>();
+            public List<string> Calls { get; } = new();
 
             public void SetSource(Type target, object source)
             {

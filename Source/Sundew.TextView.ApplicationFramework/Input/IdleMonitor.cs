@@ -10,6 +10,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
     using System;
     using Sundew.Base.Reporting;
     using Sundew.Base.Threading;
+    using Sundew.Base.Timers;
 
     /// <summary>
     /// Tracks whether the application receives input or has activity.
@@ -22,7 +23,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
         private readonly TimeSpan inputIdleTimeSpan;
         private readonly TimeSpan systemIdleTimeSpan;
         private readonly IIdleMonitorReporter? idleMonitorReporter;
-        private readonly object lockObject = new object();
+        private readonly object lockObject = new();
         private readonly ITimer inputIdleTimer;
         private readonly ITimer systemIdleTimer;
 

@@ -9,7 +9,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
 {
     using System;
     using Sundew.Base.Disposal;
-    using Sundew.Base.Threading;
+    using Sundew.Base.Timers;
     using Sundew.TextView.ApplicationFramework.DeviceInterface;
 
     /// <summary>
@@ -18,7 +18,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     /// <seealso cref="IDisposable" />
     public sealed class TextViewRendererFactory : ITextViewRendererFactory
     {
-        private readonly DisposingList<ITextViewRenderer> textViewRenderers = new DisposingList<ITextViewRenderer>();
+        private readonly DisposingList<ITextViewRenderer> textViewRenderers = new();
         private readonly ITextDisplayDevice textDisplayDevice;
         private readonly ITimerFactory timerFactory;
         private readonly ITextViewRendererReporter? textViewRendererReporter;
@@ -49,7 +49,6 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
         /// <summary>Gets the textView renderer.</summary>
         /// <param name="refreshInterval">The refresh interval.</param>
         /// <value>The textView renderer.</value>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "The textViewRenderer has disposing ownership.")]
         public ITextViewRenderer Create(TimeSpan refreshInterval)
         {
             var renderContextFactory = new RenderingContextFactory(this.textDisplayDevice);

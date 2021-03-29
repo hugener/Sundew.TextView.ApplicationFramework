@@ -16,7 +16,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
     /// <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
     public class InputEvent<TEventArgs>
     {
-        private readonly ConcurrentDictionary<object, EventHandler<TEventArgs>> targetEventHandlers = new ConcurrentDictionary<object, EventHandler<TEventArgs>>();
+        private readonly ConcurrentDictionary<object, EventHandler<TEventArgs>> targetEventHandlers = new();
         private EventHandler<TEventArgs>? alwaysEventHandlers;
 
         /// <summary>

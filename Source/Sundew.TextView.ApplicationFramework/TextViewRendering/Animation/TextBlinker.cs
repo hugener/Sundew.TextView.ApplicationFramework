@@ -17,7 +17,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Animation
     public class TextBlinker
     {
         private const char Space = ' ';
-        private readonly Flag dirtyFlag = new Flag(true);
+        private readonly Flag dirtyFlag = new(true);
         private readonly IInvalidater invalidater;
         private readonly TimeSpan interval;
         private readonly IViewTimer viewTimer;

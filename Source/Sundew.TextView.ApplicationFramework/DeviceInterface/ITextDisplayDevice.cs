@@ -7,7 +7,7 @@
 
 namespace Sundew.TextView.ApplicationFramework.DeviceInterface
 {
-    using Sundew.Base.Computation;
+    using Sundew.Base.Primitives.Computation;
     using Sundew.TextView.ApplicationFramework.TextViewRendering;
 
     /// <summary>
