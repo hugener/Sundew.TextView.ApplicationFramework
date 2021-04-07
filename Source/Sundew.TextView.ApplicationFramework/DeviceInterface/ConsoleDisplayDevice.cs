@@ -8,7 +8,7 @@
 namespace Sundew.TextView.ApplicationFramework.DeviceInterface
 {
     using System;
-    using Sundew.Base.Computation;
+    using Sundew.Base.Primitives.Computation;
     using Sundew.TextView.ApplicationFramework.TextViewRendering;
 
     /// <summary>
@@ -47,7 +47,7 @@ namespace Sundew.TextView.ApplicationFramework.DeviceInterface
         /// <value>
         /// The size.
         /// </value>
-        public Size Size => new Size(Console.WindowWidth, Console.WindowHeight);
+        public Size Size => new(Console.WindowWidth, Console.WindowHeight);
 
         /// <summary>
         /// Gets the cursor position.
@@ -55,7 +55,7 @@ namespace Sundew.TextView.ApplicationFramework.DeviceInterface
         /// <value>
         /// The cursor position.
         /// </value>
-        public Point CursorPosition => new Point(Console.CursorLeft, Console.CursorTop);
+        public Point CursorPosition => new(Console.CursorLeft, Console.CursorTop);
 
         /// <summary>
         /// Tries the create character context.

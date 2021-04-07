@@ -8,15 +8,14 @@
 namespace Sundew.TextView.ApplicationFramework.TextViewRendering
 {
     using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Sundew.Base.Collections;
-    using Sundew.Base.Computation;
+    using Sundew.Base.Primitives.Computation;
     using Sundew.Base.Reporting;
     using Sundew.Base.Threading;
     using Sundew.Base.Threading.Jobs;
+    using Sundew.Base.Timers;
     using Sundew.TextView.ApplicationFramework.TextViewRendering.Internal;
 
     /// <inheritdoc />
@@ -27,12 +26,12 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     public sealed class TextViewRenderer : ITextViewRenderer
     {
         private static readonly ITextView EmptyTextView = new NullTextView();
-        private readonly AsyncLock textViewLock = new AsyncLock();
+        private readonly AsyncLock textViewLock = new();
         private readonly IRenderingContextFactory renderContextFactory;
         private readonly ITextViewRendererReporter? textViewRendererReporter;
         private readonly ViewTimerCache viewTimerCache;
-        private readonly AutoResetEventAsync abortRenderingEvent = new AutoResetEventAsync(false);
-        private readonly ManualResetEventAsync renderingEvent = new ManualResetEventAsync(false);
+        private readonly AutoResetEventAsync abortRenderingEvent = new(false);
+        private readonly ManualResetEventAsync renderingEvent = new(false);
         private readonly ContinuousJob renderJob;
         private readonly TimeIntervalSynchronizer timeIntervalSynchronizer;
         private IInvalidaterChecker invalidater = new Invalidater.NullInvalidater();

@@ -8,7 +8,7 @@
 namespace Sundew.TextView.Pi.Drivers.Displays.Hd44780
 {
     using global::Pi.IO.Devices.Displays.Hd44780;
-    using Sundew.Base.Computation;
+    using Sundew.Base.Primitives.Computation;
     using Sundew.TextView.ApplicationFramework.DeviceInterface;
     using Sundew.TextView.ApplicationFramework.TextViewRendering;
 
@@ -71,7 +71,7 @@ namespace Sundew.TextView.Pi.Drivers.Displays.Hd44780
         /// <value>
         /// The cursor position.
         /// </value>
-        public Point CursorPosition => new Point(this.hd44780LcdDevice.CursorPosition.Column, this.hd44780LcdDevice.CursorPosition.Row);
+        public Point CursorPosition => new(this.hd44780LcdDevice.CursorPosition.Column, this.hd44780LcdDevice.CursorPosition.Row);
 
         /// <summary>
         /// Tries the create character context.

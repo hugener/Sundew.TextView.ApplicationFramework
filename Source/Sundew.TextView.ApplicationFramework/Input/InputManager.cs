@@ -18,7 +18,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
     /// </summary>
     public sealed class InputManager : IInputManager
     {
-        private readonly ConcurrentStack<List<object?>> inputTargetStack = new ConcurrentStack<List<object?>>();
+        private readonly ConcurrentStack<List<object?>> inputTargetStack = new();
         private readonly IInputManagerReporter? inputManagerReporter;
         private List<object?>? temporaryInputTargets;
 
@@ -150,7 +150,7 @@ namespace Sundew.TextView.ApplicationFramework.Input
         /// <returns>An <see cref="InputEvent{TEventArgs}"/>.</returns>
         public InputEvent<TEventArgs> CreateEvent<TEventArgs>()
         {
-            return new InputEvent<TEventArgs>();
+            return new();
         }
 
         /// <summary>

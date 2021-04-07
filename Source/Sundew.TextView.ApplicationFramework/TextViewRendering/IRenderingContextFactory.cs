@@ -7,7 +7,7 @@
 
 namespace Sundew.TextView.ApplicationFramework.TextViewRendering
 {
-    using Sundew.Base.Computation;
+    using Sundew.Base.Primitives.Computation;
 
     /// <summary>
     /// Interface for creating render contexts.

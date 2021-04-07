@@ -12,7 +12,7 @@ namespace Sundew.TextView.ApplicationFramework
     using System.Threading;
     using System.Threading.Tasks;
     using Sundew.Base.Disposal;
-    using Sundew.Base.Threading;
+    using Sundew.Base.Timers;
     using Sundew.TextView.ApplicationFramework.DeviceInterface;
     using Sundew.TextView.ApplicationFramework.Input;
     using Sundew.TextView.ApplicationFramework.Navigation;
@@ -21,13 +21,12 @@ namespace Sundew.TextView.ApplicationFramework
     /// <summary>
     /// Represents an application.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "The run method blocks until application close, when this happens cancellationTokenSource is disposed.")]
     public sealed class Application : IApplication
     {
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private readonly List<IIdleMonitor> idleMonitors = new List<IIdleMonitor>();
-        private readonly object inputManagerCreationLock = new object();
-        private readonly DisposingList<IDisposable> disposer = new DisposingList<IDisposable>();
+        private readonly CancellationTokenSource cancellationTokenSource = new();
+        private readonly List<IIdleMonitor> idleMonitors = new();
+        private readonly object inputManagerCreationLock = new();
+        private readonly DisposingList<IDisposable> disposer = new();
         private InputManager? inputManager;
 
         /// <summary>
@@ -120,7 +119,6 @@ namespace Sundew.TextView.ApplicationFramework
         /// <param name="textDisplayDevice">The text display device.</param>
         /// <param name="refreshInterval">The refresh interval.</param>
         /// <returns>A <see cref="TextViewNavigator" />.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "The disposer has ownership")]
         public ITextViewNavigator StartRendering(ITextDisplayDevice textDisplayDevice, TimeSpan refreshInterval)
         {
             var timerFactory = new TimerFactory();
@@ -142,7 +140,6 @@ namespace Sundew.TextView.ApplicationFramework
         /// <param name="textViewRendererFactory">The text view renderer factory.</param>
         /// <param name="refreshInterval">The refresh interval.</param>
         /// <returns>A <see cref="TextViewNavigator"/>.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "The disposer has ownership.")]
         public ITextViewNavigator StartRendering(ITextViewRendererFactory textViewRendererFactory, TimeSpan refreshInterval)
         {
             var textViewRenderer = textViewRendererFactory.Create(refreshInterval);

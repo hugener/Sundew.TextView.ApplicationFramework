@@ -5,13 +5,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Sundew.Base.Computation;
-using Sundew.TextView.ApplicationFramework.DeviceInterface;
-using Sundew.TextView.ApplicationFramework.TextViewRendering;
-using LcdConsole = Iot.Device.CharacterLcd.LcdConsole;
-
 namespace Sundew.TextView.Iot.Devices.Drivers
 {
+    using Sundew.Base.Primitives.Computation;
+    using Sundew.TextView.ApplicationFramework.DeviceInterface;
+    using Sundew.TextView.ApplicationFramework.TextViewRendering;
+    using LcdConsole = global::Iot.Device.CharacterLcd.LcdConsole;
+
     /// <summary>
     /// Implementation of <see cref="ITextDisplayDevice"/> for <see cref="Hd44780"/>.
     /// </summary>
@@ -61,7 +61,7 @@ namespace Sundew.TextView.Iot.Devices.Drivers
         /// <value>
         /// The size.
         /// </value>
-        public Size Size => new Size(this.hd44780.Size.Width, this.hd44780.Size.Height);
+        public Size Size => new(this.hd44780.Size.Width, this.hd44780.Size.Height);
 
         /// <summary>
         /// Gets the cursor position.
@@ -69,7 +69,7 @@ namespace Sundew.TextView.Iot.Devices.Drivers
         /// <value>
         /// The cursor position.
         /// </value>
-        public Point CursorPosition => new Point(this.lcdConsole.CursorLeft, this.lcdConsole.CursorTop);
+        public Point CursorPosition => new(this.lcdConsole.CursorLeft, this.lcdConsole.CursorTop);
 
         /// <summary>
         /// Tries the create character context.

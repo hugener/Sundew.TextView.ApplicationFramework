@@ -17,7 +17,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
     /// <summary>Implements time interval synchronization between calls.</summary>
     public class TimeIntervalSynchronizer
     {
-        private readonly Stopwatch stopwatch = new Stopwatch();
+        private readonly Stopwatch stopwatch = new();
         private readonly ITimeIntervalSynchronizerReporter? timeIntervalSynchronizerReporter;
         private TimeSpan interval;
 

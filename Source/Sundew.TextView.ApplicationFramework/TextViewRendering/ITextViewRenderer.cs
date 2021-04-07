@@ -9,7 +9,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering
 {
     using System;
     using System.Threading.Tasks;
-    using Sundew.Base.Computation;
+    using Sundew.Base.Primitives.Computation;
 
     /// <summary>
     /// Interface for implementing an <see cref="ITextViewRenderer"/>.

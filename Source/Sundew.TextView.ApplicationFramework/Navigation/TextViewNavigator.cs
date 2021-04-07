@@ -23,8 +23,8 @@ namespace Sundew.TextView.ApplicationFramework.Navigation
     {
         private static readonly object[] EmptyInputTargets = Array.Empty<object>();
         private readonly TextViewInfo initialTextViewInfo;
-        private readonly AsyncLock asyncLock = new AsyncLock();
-        private readonly ConcurrentStack<TextViewInfo> screenStack = new ConcurrentStack<TextViewInfo>();
+        private readonly AsyncLock asyncLock = new();
+        private readonly ConcurrentStack<TextViewInfo> screenStack = new();
         private readonly ITextViewRenderer textViewRenderer;
         private readonly IInputManager inputManager;
         private TextViewInfo showTextViewInfo;

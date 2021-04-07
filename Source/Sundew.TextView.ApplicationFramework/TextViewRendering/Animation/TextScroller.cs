@@ -17,14 +17,14 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Animation
     public class TextScroller
     {
         private const char Space = ' ';
-        private readonly Flag dirtyFlag = new Flag(true);
+        private readonly Flag dirtyFlag = new(true);
         private readonly IInvalidater invalidater;
         private readonly ScrollMode scrollMode;
         private readonly TimeSpan startDelay;
         private readonly TimeSpan interval;
         private readonly TimeSpan endDelay;
         private readonly IViewTimer viewTimer;
-        private readonly ScrollData scrollData = new ScrollData(string.Empty, 0, Direction.Right, 0);
+        private readonly ScrollData scrollData = new(string.Empty, 0, Direction.Right, 0);
         private string frame = string.Empty;
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Sundew.TextView.ApplicationFramework.TextViewRendering.Animation
         {
             this.frame = string.IsNullOrEmpty(this.scrollData.Text)
                 ? string.Empty
-                : this.scrollData.Text.Substring(this.scrollData.Ticks).LimitAndPadRight(this.scrollData.Width, Space);
+                : this.scrollData.Text.Substring(this.scrollData.Ticks).AlignLeftAndLimit(this.scrollData.Width, Space);
         }
 
         private void OnViewTimerTick(object sender, EventArgs eventArgs)
