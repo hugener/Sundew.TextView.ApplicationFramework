@@ -1,9 +1,28 @@
 <Project>
- <PropertyGroup>
-   <Deterministic>true</Deterministic>
-   <Version>0.4</Version>
-   <OutputPath>bin/$(Configuration)</OutputPath>
-   <LangVersion>latest</LangVersion>
-   <Nullable>enable</Nullable>
- </PropertyGroup>
+  <PropertyGroup>
+    <Deterministic>true</Deterministic>
+    <Version>0.4</Version>
+    <OutputPath>bin/$(Configuration)</OutputPath>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <Company>Hukano</Company>
+    <Authors>Kim Hugener-Ohlsen</Authors>
+    <Copyright>Kim Hugener-Ohlsen</Copyright>
+    <RepositoryUrl>https://github.com/sundews/Sundew.TextView.ApplicationFramework</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/sundews/Sundew.TextView.ApplicationFramework</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ContinuousIntegrationBuild)' == 'true'">
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)"/>
+  </ItemGroup>
+  <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
 </Project>

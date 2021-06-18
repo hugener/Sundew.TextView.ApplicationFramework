@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>9</LangVersion>
+    <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;Release-Stable</Configurations>
   </PropertyGroup>
 

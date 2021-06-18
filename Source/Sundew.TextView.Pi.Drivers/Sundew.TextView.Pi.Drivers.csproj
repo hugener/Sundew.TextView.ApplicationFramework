@@ -2,18 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Company>Hukano</Company>
-    <Authors>Kim Hugener-Ohlsen</Authors>
     <Configurations>Debug;Release;Release-Stable</Configurations>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Kim Hugener-Ohlsen</Copyright>
-    <PackageProjectUrl>https://github.com/hugener/Sundew.TextView.ApplicationFramework</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/hugener/Sundew.TextView.ApplicationFramework</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Stable|AnyCPU'">
@@ -34,7 +26,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Pi.IO.Devices.SundewFork" Version="0.5.1" />
-    <PackageReference Include="Sundew.Packaging.Publish" Version="6.1.0">
+    <PackageReference Include="Sundew.Packaging.Publish" Version="7.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
